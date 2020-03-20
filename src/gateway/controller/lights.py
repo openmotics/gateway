@@ -23,34 +23,37 @@ from peewee import DoesNotExist
 
 from gateway.observer import Event
 from ioc import Injectable, Inject, INJECTED, Singleton
-from models import Light
+from models import Light, Plugin
 
 logger = logging.getLogger('openmotics')
 
 
 class LightStatus(object):
-
     def __init__(self, r, g, b):
         self.r = r
         self.g = g
         self.b = b
 
-class LightStatusTracker(object):
+    def __eq__(self, other):
+        return self.r == other.r and self.g == other.g and self.b == other.b
 
-    def __init__(self, r, g, b):
+
+class LightStatusTracker(object):
+    def __init__(self):
         self._light_status = {}
         self._change_callback = None
 
     def get(self, id):
         return self._light_status[id]
 
-    def set(self, id, state):
-        if isinstance(state, LightStatus):
-            self._light_status[id] = state
-            if self._change_callback:
-                self._change_callback(light_id=id, light_state=state)
+    def set(self, id, new_status):
+        if isinstance(new_status, LightStatus):
+            old_status = self._light_status.get(id)
+            self._light_status[id] = new_status
+            if self._change_callback and new_status != old_status:
+                self._change_callback(light_id=id, light_state=new_status)
         else:
-            raise Exception('Not a valid LightStatus')
+            raise Exception('Not a valid status for light {0}'.format(id))
 
     def subscribe_changes(self, callback):
         self._change_callback = callback
@@ -80,7 +83,9 @@ class LightController(object):
 
     # Config
 
-    def upsert_light(self, name, type, external_id, plugin):
+    @staticmethod
+    def create_or_update_light(name, type, plugin_name, external_id):
+        plugin = Plugin.get(name=plugin_name)
         try:
             light = Light.get(plugin=plugin, external_id=external_id)
         except DoesNotExist:
@@ -90,17 +95,28 @@ class LightController(object):
         light.save()
         return light
 
-    def delete_light_by_id(self, light_id):
+    @staticmethod
+    def delete_light_by_id(light_id):
         Light.delete_by_id(light_id)
 
-    def delete_light_by_external_id(self, external_id, plugin):
+    @staticmethod
+    def delete_light_by_external_id(plugin_name, external_id):
+        plugin = Plugin.get(name=plugin_name)
         light = Light.get(plugin=plugin, external_id=external_id)
         light.delete()
 
     # State
 
+    def get_light_status_by_id(self, id):
+        self._light_status_tracker.get(id)
+
+    def get_light_status_by_external_id(self, plugin_name, external_id):
+        plugin = Plugin.get(name=plugin_name)
+        light = Light.get(plugin=plugin, external_id=external_id)
+        self.get_light_status_by_id(light.id)
+
     def set_light_status(self, id, percentage):
-        # TODO: get some in-memory write-through copy of the Light database objects
+        # TODO: get some in-memory write-through copy of the Light database (config) objects
         light = Light.get(id=id)
         if not light.plugin:
             state = percentage > 0
@@ -109,6 +125,11 @@ class LightController(object):
         else:
             new_status = LightStatus(r=percentage, g=percentage, b=percentage)
             self._light_status_tracker.set(id, new_status)
+
+    def set_light_status_by_external_id(self, plugin_name, external_id, percentage):
+        plugin = Plugin.get(name=plugin_name)
+        light = Light.get(plugin=plugin, external_id=external_id)
+        self.set_light_status(light.id, percentage)
 
     # Events
 

@@ -240,7 +240,7 @@ class WebInterface(object):
     @Inject
     def __init__(self, user_controller=INJECTED, gateway_api=INJECTED, maintenance_controller=INJECTED,
                  message_client=INJECTED, configuration_controller=INJECTED, scheduling_controller=INJECTED,
-                 thermostat_controller=INJECTED):
+                 thermostat_controller=INJECTED, light_controller=INJECTED):
         """
         Constructor for the WebInterface.
 
@@ -251,11 +251,13 @@ class WebInterface(object):
         :type configuration_controller: gateway.config.ConfigController
         :type scheduling_controller: gateway.scheduling.SchedulingController
         :type thermostat_controller: gateway.thermostat.thermostat_controller.ThermostatController
+        :type light_controller: gateway.controller.lights.LightController
         """
         self._user_controller = user_controller
         self._config_controller = configuration_controller
         self._scheduling_controller = scheduling_controller
         self._thermostat_controller = thermostat_controller
+        self._light_controller = light_controller
         self._plugin_controller = None
 
         self._gateway_api = gateway_api
@@ -2205,6 +2207,34 @@ class WebInterface(object):
     def remove_schedule(self, schedule_id):
         self._scheduling_controller.remove_schedule(schedule_id)
         return {}
+
+    @openmotics_api(auth=True, plugin_exposed=False)
+    def create_or_update_light(self, name, type, plugin_name, external_id):
+        """
+        Creates a new light.
+
+        :param name: Name of the light
+        :type name: str
+        :param type: Type of  of the light
+        :type type: type
+        :param external_id: External id of the light
+        :type external_id: int
+        :param plugin_name: plugin name of the plugin this light belongs to
+        :type plugin_name: str
+        """
+        return self._light_controller.create_or_update_light(name, type, plugin_name, external_id)
+
+    @openmotics_api(auth=True, plugin_exposed=False)
+    def delete_light(self, plugin_name, external_id):
+        """
+        Deletes a light.
+
+        :param external_id: External id of the light
+        :type external_id: int
+        :param plugin_name: plugin name of the plugin this light belongs to
+        :type plugin_name: str
+        """
+        return self._light_controller.delete_light_by_external_id(plugin_name, external_id)
 
     @openmotics_api(auth=True)
     def get_plugins(self):
