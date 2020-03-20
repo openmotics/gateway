@@ -57,8 +57,8 @@ class BaseModel(Model):
 class Plugin(BaseModel):
     id = PrimaryKeyField()
     name = CharField()
+    version = CharField()
     uri = CharField(unique=True)
-
 
 class Light(BaseModel):
     TYPES = (
@@ -66,7 +66,6 @@ class Light(BaseModel):
         (1, 'Dimmable'),
         (2, 'RGB'),
     )
-
     id = PrimaryKeyField()
     name = CharField()
     type = IntegerField(choices=TYPES)

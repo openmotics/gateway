@@ -46,6 +46,7 @@ class Event(object):
     class Types(object):
         INPUT_CHANGE = 'INPUT_CHANGE'
         OUTPUT_CHANGE = 'OUTPUT_CHANGE'
+        LIGHT_CHANGE = 'LIGHT_CHANGE'
         SHUTTER_CHANGE = 'SHUTTER_CHANGE'
         THERMOSTAT_CHANGE = 'THERMOSTAT_CHANGE'
         THERMOSTAT_GROUP_CHANGE = 'THERMOSTAT_GROUP_CHANGE'
@@ -328,5 +329,3 @@ class Observer(object):
                                                                 {'module_nr': module_id})['status']}
             )
         self._shutters_last_updated = time.time()
-
-

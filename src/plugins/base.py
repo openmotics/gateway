@@ -22,6 +22,7 @@ from gateway.observer import Event
 from datetime import datetime
 from ioc import Injectable, Inject, INJECTED, Singleton
 from plugins.runner import PluginRunner
+from models import Plugin
 
 logger = logging.getLogger("openmotics")
 
@@ -262,6 +263,11 @@ class PluginController(object):
             self.__start_plugin_runner(runner, name, True)
             self.__update_dependencies()
 
+            # save/update plugin in the database
+            plugin = Plugin.get_or_create(name=name)
+            plugin.version = version
+            plugin.save()
+
             return 'Plugin successfully installed'
         finally:
             rmtree(tmp_dir)
@@ -302,6 +308,11 @@ class PluginController(object):
         if os.path.exists(conf_file):
             os.remove(conf_file)
 
+        # delete plugin in the database if existing
+        plugin = Plugin.get_or_none(name=name)
+        if plugin:
+            plugin.delete()
+
         return {'msg': 'Plugin successfully removed'}
 
     def __iter_running_runners(self):
@@ -325,6 +336,10 @@ class PluginController(object):
                       if output['status'] == 1]
             for runner in self.__iter_running_runners():
                 runner.process_output_status(states)
+        if event.type == Event.Types.LIGHT_CHANGE:
+            # Should be called when the light status changes, notifies all plugins.
+            for runner in self.__iter_running_runners():
+                runner.process_light_status(event)
 
     def process_shutter_status(self, shutter_status_inst):
         """ Should be called when the shutter status changes, notifies all plugins. """

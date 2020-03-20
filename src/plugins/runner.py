@@ -164,6 +164,9 @@ class PluginRunner:
     def process_output_status(self, status):
         self._do_async('output_status', {'status': status}, should_filter=True)
 
+    def process_light_status(self, status):
+        self._do_async('light_status', {'status': status}, should_filter=True)
+
     def process_shutter_status(self, status):
         self._do_async('shutter_status', status, should_filter=True)
 

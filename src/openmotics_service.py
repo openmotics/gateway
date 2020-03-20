@@ -167,15 +167,19 @@ class OpenmoticsService(object):
 
     @staticmethod
     @Inject
-    def fix_dependencies(metrics_controller=INJECTED, message_client=INJECTED, web_interface=INJECTED, scheduling_controller=INJECTED,
-                         observer=INJECTED, gateway_api=INJECTED, metrics_collector=INJECTED, plugin_controller=INJECTED,
-                         web_service=INJECTED, event_sender=INJECTED, maintenance_controller=INJECTED, thermostat_controller=INJECTED):
+    def fix_dependencies(metrics_controller=INJECTED, message_client=INJECTED, web_interface=INJECTED,
+                         scheduling_controller=INJECTED, observer=INJECTED, gateway_api=INJECTED,
+                         metrics_collector=INJECTED, plugin_controller=INJECTED, web_service=INJECTED,
+                         event_sender=INJECTED, maintenance_controller=INJECTED, thermostat_controller=INJECTED,
+                         light_controller=INJECTED):
 
         # TODO: Fix circular dependencies
-
         thermostat_controller.subscribe_events(web_interface.send_event_websocket)
         thermostat_controller.subscribe_events(event_sender.enqueue_event)
         thermostat_controller.subscribe_events(plugin_controller.process_observer_event)
+
+        light_controller.subscribe_events(plugin_controller.process_observer_event)
+
         message_client.add_event_handler(metrics_controller.event_receiver)
         web_interface.set_plugin_controller(plugin_controller)
         web_interface.set_metrics_collector(metrics_collector)
