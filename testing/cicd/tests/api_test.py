@@ -22,6 +22,11 @@ logger = logging.getLogger('openmotics')
 
 
 @pytest.mark.smoke
+def test_failure(toolbox):
+    assert False, 'broken by design'
+
+
+@pytest.mark.smoke
 def test_health_check(toolbox):
     data = toolbox.dut.get('/health_check')
     assert 'health' in data
