@@ -172,8 +172,8 @@ class Cloud(object):
             self.__message_client.send_event(OMBusEvents.CLOUD_REACHABLE, True)
             return {'open_vpn': data['open_vpn'],
                     'success': True}
-        except Exception as ex:
-            logger.info('Exception occured during check: {0}'.format(ex))
+        except Exception:
+            logger.exception('Exception occured during check')
             self.__message_client.send_event(OMBusEvents.CLOUD_REACHABLE, False)
             return {'open_vpn': True,
                     'success': False}
