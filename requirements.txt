@@ -1,7 +1,7 @@
 # NOTE: packages that should be removed during deployment should be explicitly
 # uninstalled with pip in `post-update.sh`, otherwise they remain available.
 
-pip ==  19.3.1
+pip == 19.3.1
 hypothesis == 4.57.1
 mock == 2.0.0
 pytest == 4.6.9
