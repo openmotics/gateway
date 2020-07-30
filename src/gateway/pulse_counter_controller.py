@@ -87,10 +87,12 @@ class PulseCounterController(BaseController):
 
     def delete(self, number):  # type: (int) -> None
         pulse_counter = PulseCounter.get_or_none(number=number)  # type: PulseCounter
-        if pulse_counter:
-            pulse_counter.delete()
-        else:
+        if not pulse_counter:
             raise KeyError('Pulse counter with number {} does not exist'.format(number))
+        elif pulse_counter.source == 'master':
+            raise KeyError('Cannot delete master based pulse counters')
+        else:
+            pulse_counter.delete()
 
     def load_pulse_counter(self, pulse_counter_id):
         pulse_counter = PulseCounter.get(number=pulse_counter_id)  # type: PulseCounter
