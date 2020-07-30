@@ -1611,6 +1611,16 @@ class WebInterface(object):
 
     # PulseCounters
 
+    @openmotics_api(auth=True, check=types(number=int, name=str, room_number=int, persistent=bool))
+    def create_pulse_counter(self, number, name, room_number, persistent):  # type: (int, str, int, bool) -> Dict
+        result_dto = self._pulse_counter_controller.create(number, name=name, room_number=room_number, persistent=persistent)
+        return {'config': PulseCounterSerializer.serialize(pulse_counter_dto=result_dto)}
+
+    @openmotics_api(auth=True, check=types(number=int))
+    def delete_pulse_counter(self, number):  # type: (int) -> Dict
+        self._pulse_counter_controller.delete(number)
+        return {}
+
     @openmotics_api(auth=True, check=types(id=int, fields='json'))
     def get_pulse_counter_configuration(self, id, fields=None):  # type: (int, Optional[List[str]]) -> Dict[str, Any]
         """

@@ -63,7 +63,36 @@ class PulseCounterController(BaseController):
         logger.info('ORM sync (PulseCounter): completed')
         return True
 
-    def load_pulse_counter(self, pulse_counter_id):  # type: (int) -> PulseCounterDTO
+    def create(self, number, name=None, room_number=None, persistent=False):  # type: (int, str, int, bool) -> PulseCounterDTO
+        if number is None:
+            raise ValueError('Pulse counter needs a number, not {}'.format(number))
+        pulse_counter = PulseCounter.get_or_none(number=number)  # type: PulseCounter
+        if pulse_counter:
+            raise ValueError('Pulse counter with number {} already exists'.format(number))
+        else:
+            name = name if name else 'PulseCounter {0}'.format(number)
+            pulse_counter = PulseCounter(number=number,
+                                         name=name,
+                                         source='gateway',
+                                         persistent=persistent)
+
+            if room_number and 0 <= room_number <= 100:
+                room = Room.get_or_create(number=room_number)
+                room, _ = Room.get_or_create(number=room)
+            else:
+                room = None
+            pulse_counter.room = room
+            pulse_counter.save()
+            return PulseCounterMapper.orm_to_dto(pulse_counter)
+
+    def delete(self, number):  # type: (int) -> None
+        pulse_counter = PulseCounter.get_or_none(number=number)  # type: PulseCounter
+        if pulse_counter:
+            pulse_counter.delete()
+        else:
+            raise KeyError('Pulse counter with number {} does not exist'.format(number))
+
+    def load_pulse_counter(self, pulse_counter_id):
         pulse_counter = PulseCounter.get(number=pulse_counter_id)  # type: PulseCounter
         if pulse_counter.source == 'master':
             pulse_counter_dto = self._master_controller.load_pulse_counter(pulse_counter_id=pulse_counter.number)
@@ -127,13 +156,10 @@ class PulseCounterController(BaseController):
 
         PulseCounter.delete().where(PulseCounter.number >= amount).execute()
         for number in range(amount_of_master_pulse_counters, amount):
-            pulse_counter = PulseCounter.get_or_none(number=number)
-            if pulse_counter is None:
-                pulse_counter = PulseCounter(number=number,
-                                             name='PulseCounter {0}'.format(number),
-                                             source='gateway',
-                                             persistent=False)
-                pulse_counter.save()
+            try:
+                self.create(number)
+            except ValueError as e:
+                logger.error("Error creating pulse counter {}: {}".format(number, e))
         return amount
 
     def get_amount_of_pulse_counters(self):  # type: () -> int
