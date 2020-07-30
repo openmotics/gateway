@@ -36,7 +36,8 @@ class PowerControllerTest(unittest.TestCase):
 
     def setUp(self):
         self.power_communicator = mock.Mock()
-        SetUpTestInjections(power_communicator=self.power_communicator)
+        SetUpTestInjections(power_communicator=self.power_communicator,
+                            power_store=mock.Mock())
         self.controller = PowerController()
 
     def test_get_module_current(self):

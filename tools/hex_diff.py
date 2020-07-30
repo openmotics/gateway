@@ -31,20 +31,48 @@ def diff(hex_filename_1, hex_filename_2):
                                           hex_filename_2.split('/')[-1].ljust(WIDTH * 2)))
     print('+-{0}-+-{1}-+-{1}-+'.format('-' * 6, '-' * WIDTH * 2))
 
+    previous_data_1, previous_data_2 = None, None
+    start_skip = None
+    end_skip = None
     for address in xrange(0, max_address, WIDTH):
         data_1 = []
         data_2 = []
         for offset in xrange(WIDTH):
             data_1.append(hex_1[address + offset])
             data_2.append(hex_2[address + offset])
-        formatted_address = '{:06X}'.format(address)
-        formatted_data_1 = ''.join('{:02X}'.format(byte) for byte in data_1)
-        formatted_data_2 = '='.ljust(WIDTH * 2)
-        if data_1 != data_2:
-            formatted_data_2 = ''.join('{:02X}'.format(byte) for byte in data_2).rjust(WIDTH * 2)
-        print('| {0} | {1} | {2} |'.format(formatted_address, formatted_data_1, formatted_data_2))
+
+        # Reducing output
+        if data_1 == previous_data_1 and data_2 == previous_data_2:
+            previous_data_1, previous_data_2 = data_1, data_2
+            if start_skip is None:
+                start_skip = address
+            end_skip = address
+            continue
+        else:
+            if start_skip is not None:
+                _print('...', previous_data_1, previous_data_2)
+                _print(end_skip, previous_data_1, previous_data_2)
+        start_skip = None
+        end_skip = None
+        previous_data_1, previous_data_2 = data_1, data_2
+
+        # Printing
+        _print(address, data_1, data_2)
 
     print('+-{0}-+-{1}-+-{1}-+'.format('-' * 6, '-' * WIDTH * 2))
+
+
+def _print(address, data_1, data_2):
+    # Printing
+    if address == '...':
+        formatted_address = ' ...  '
+    else:
+        formatted_address = '{:06X}'.format(address)
+    formatted_data_1 = ''.join('{:02X}'.format(byte) for byte in data_1)
+    formatted_data_2 = '='.ljust(WIDTH * 2)
+    if data_1 != data_2:
+        formatted_data_2 = ''.join('{:02X}'.format(byte) for byte in data_2).rjust(WIDTH * 2)
+    print('| {0} | {1} | {2} |'.format(formatted_address, formatted_data_1, formatted_data_2))
 
 
 if __name__ == "__main__":

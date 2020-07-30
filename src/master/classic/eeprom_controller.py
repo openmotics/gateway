@@ -122,6 +122,17 @@ class EepromController(object):
             self._eeprom_extension.write_data(eext_data)
             self.dirty = True
 
+    def write_address(self, address, data):
+        # type: (EepromAddress, str) -> None
+        """
+        Writes data to a given address (+length)
+        """
+        self._eeprom_file.write([EepromData(address, data)])
+
+    def activate(self):
+        self._eeprom_file.activate()
+        self.dirty = True
+
 
 @Injectable.named('eeprom_file')
 @Singleton

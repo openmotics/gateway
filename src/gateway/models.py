@@ -136,6 +136,17 @@ class GroupAction(BaseModel):
     number = IntegerField(unique=True)
 
 
+class Module(BaseModel):
+    id = AutoField()
+    source = CharField()
+    address = CharField()
+    module_type = CharField(null=True)
+    hardware_type = CharField()
+    firmware_version = CharField(null=True)
+    hardware_version = CharField(null=True)
+    order = IntegerField(null=True)
+
+
 class ThermostatGroup(BaseModel):
     id = AutoField()
     number = IntegerField(unique=True)

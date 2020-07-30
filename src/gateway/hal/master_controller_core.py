@@ -25,7 +25,7 @@ from threading import Thread, Timer
 from peewee import DoesNotExist
 
 from gateway.dto import GroupActionDTO, InputDTO, OutputDTO, PulseCounterDTO, \
-    SensorDTO, ShutterDTO, ShutterGroupDTO, ThermostatDTO
+    SensorDTO, ShutterDTO, ShutterGroupDTO, ThermostatDTO, ModuleDTO
 from gateway.enums import ShutterEnums
 from gateway.hal.mappers_core import GroupActionMapper, InputMapper, \
     OutputMapper, SensorMapper, ShutterMapper
@@ -741,8 +741,12 @@ class MasterCoreController(MasterController):
         # C/E = Physical/internal CAN Control
         return {'outputs': outputs, 'inputs': inputs, 'shutters': [], 'can_inputs': can_inputs}
 
-    def get_modules_information(self, address=None):
-        raise NotImplementedError()
+    def get_modules_information(self, address=None):  # type: (Optional[str]) -> List[ModuleDTO]
+        logger.warn('Core `get_modules_information` not yet implemented')  # TODO
+        return []
+
+    def replace_module(self, old_address, new_address):  # type: (str, str) -> None
+        raise NotImplementedError('Module replacement not supported')
 
     def flash_leds(self, led_type, led_id):
         raise NotImplementedError()

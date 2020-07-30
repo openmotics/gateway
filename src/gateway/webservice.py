@@ -36,7 +36,6 @@ import ujson as json
 from cherrypy.lib.static import serve_file
 from decorator import decorator
 from peewee import DoesNotExist
-from six.moves.configparser import ConfigParser
 from six.moves.urllib.parse import urlparse, urlunparse
 
 import constants
@@ -44,7 +43,7 @@ import gateway
 from gateway.api.serializers import GroupActionSerializer, InputSerializer, \
     OutputSerializer, OutputStateSerializer, PulseCounterSerializer, \
     RoomSerializer, SensorSerializer, ShutterGroupSerializer, \
-    ShutterSerializer, ThermostatSerializer
+    ShutterSerializer, ThermostatSerializer, ModuleSerializer
 from gateway.dto import RoomDTO
 from gateway.enums import ShutterEnums
 from gateway.hal.master_controller import CommunicationFailure
@@ -75,6 +74,7 @@ if False:
     from gateway.sensor_controller import SensorController
     from gateway.pulse_counter_controller import PulseCounterController
     from gateway.group_action_controller import GroupActionController
+    from gateway.module_controller import ModuleController
     from gateway.hal.frontpanel_controller import FrontpanelController
     from plugins.base import PluginController
 
@@ -294,7 +294,7 @@ class WebInterface(object):
                  thermostat_controller=INJECTED, shutter_controller=INJECTED, output_controller=INJECTED,
                  room_controller=INJECTED, input_controller=INJECTED, sensor_controller=INJECTED,
                  pulse_counter_controller=INJECTED, group_action_controller=INJECTED,
-                 frontpanel_controller=INJECTED):
+                 frontpanel_controller=INJECTED, module_controller=INJECTED):
         """
         Constructor for the WebInterface.
         """
@@ -310,6 +310,7 @@ class WebInterface(object):
         self._pulse_counter_controller = pulse_counter_controller  # type: PulseCounterController
         self._group_action_controller = group_action_controller  # type: GroupActionController
         self._frontpanel_controller = frontpanel_controller  # type: FrontpanelController
+        self._module_controller = module_controller  # type: ModuleController
 
         self._gateway_api = gateway_api  # type: GatewayApi
         self._maintenance_controller = maintenance_controller  # type: MaintenanceController
@@ -536,13 +537,23 @@ class WebInterface(object):
         """
         return self._gateway_api.get_modules()
 
-    @openmotics_api(auth=True)
-    def get_modules_information(self, address=None):
+    @openmotics_api(auth=True, check=types(address=str, fields='json'))
+    def get_modules_information(self, address=None, fields=None):  # type: (Optional[str], Optional[List[str]]) -> Dict[str, Any]
         """
         Gets an overview of all modules and information
-        :return: Dict containing information per address
+        :param address: Optional address filter
+        :param fields: The field of the module information to get, None if all
         """
-        return {'modules': self._gateway_api.get_modules_information(address)}
+        return {'modules': {'master': {module_dto.address: ModuleSerializer.serialize(module_dto=module_dto, fields=fields)
+                                       for module_dto in self._module_controller.load_master_modules(address)},
+                            'energy': {module_dto.address: ModuleSerializer.serialize(module_dto=module_dto, fields=fields)
+                                       for module_dto in self._module_controller.load_energy_modules(address)}}}
+
+    @openmotics_api(auth=True, check=types(old_address=str, new_address=str))
+    def replace_module(self, old_address, new_address):  # type: (str, str) -> Dict[str, Any]
+        old_module, new_module = self._module_controller.replace_module(old_address, new_address)
+        return {'old_module': ModuleSerializer.serialize(old_module, fields=None),
+                'new_module': ModuleSerializer.serialize(new_module, fields=None)}
 
     @openmotics_api(auth=True)
     def get_features(self):

@@ -39,20 +39,29 @@ class PulseCounterController(BaseController):
         super(PulseCounterController, self).__init__(master_controller)
         self._counts = {}  # type: Dict[int, int]
 
-    def sync_orm(self):
+    def _sync_orm(self):
+        if self._sync_running:
+            logger.info('ORM sync (PulseCounter): Already running')
+            return False
+        self._sync_running = True
+
         logger.info('ORM sync (PulseCounter)')
 
-        for pulse_counter_dto in self._master_controller.load_pulse_counters():
-            pulse_counter_id = pulse_counter_dto.id
-            pulse_counter = PulseCounter.get_or_none(number=pulse_counter_id)
-            if pulse_counter is None:
-                pulse_counter = PulseCounter(number=pulse_counter_id,
-                                             name='PulseCounter {0}'.format(pulse_counter_id),
-                                             source='master',
-                                             persistent=False)
-                pulse_counter.save()
+        try:
+            for pulse_counter_dto in self._master_controller.load_pulse_counters():
+                pulse_counter_id = pulse_counter_dto.id
+                pulse_counter = PulseCounter.get_or_none(number=pulse_counter_id)
+                if pulse_counter is None:
+                    pulse_counter = PulseCounter(number=pulse_counter_id,
+                                                 name='PulseCounter {0}'.format(pulse_counter_id),
+                                                 source='master',
+                                                 persistent=False)
+                    pulse_counter.save()
+        finally:
+            self._sync_running = False
 
         logger.info('ORM sync (PulseCounter): completed')
+        return True
 
     def load_pulse_counter(self, pulse_counter_id):  # type: (int) -> PulseCounterDTO
         pulse_counter = PulseCounter.get(number=pulse_counter_id)  # type: PulseCounter

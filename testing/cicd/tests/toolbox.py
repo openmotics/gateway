@@ -249,8 +249,7 @@ class Toolbox(object):
             assert 'o' in data['outputs']
         except Exception:
             logger.info('adding virtual modules...')
-            self.dut.get('/add_virtual_output')
-            time.sleep(2)
+            self.add_virtual_modules(module_amounts={'o': 1})
 
         data = self.dut.get('/get_modules')  # workaround for list_modules/list_energy_modules
         assert 'o' in data['outputs']
@@ -356,40 +355,84 @@ class Toolbox(object):
         logger.debug('stop module discover')
         self.dut.get('/module_discover_stop')
 
-    def discover_modules(self, output_modules=False, input_modules=False, can_controls=False, ucans=False):
+    def discover_modules(self, output_modules=False, input_modules=False, can_controls=False, ucans=False, timeout=120):
         logger.debug('Discovering modules')
+        since = time.time()
+
         if ucans:
             for ucan_input in INPUT_MODULE_LAYOUT['C'].inputs:
                 self.tester.toggle_output(ucan_input.tester_output_id, delay=0.5)
             time.sleep(0.5)  # Give a brief moment for the CC to settle
+
+        new_modules = []
+        self.clear_module_discovery_log()
         self.module_discover_start()
         try:
-            log_output = []
             addresses = []
             if output_modules:
                 self.tester.toggle_output(self.DEBIAN_DISCOVER_OUTPUT, delay=0.5)
-                log_output += self.assert_modules(module_amounts={'O': 1}, addresses=addresses)
+                new_modules += self.watch_module_discovery_log(module_amounts={'O': 1}, addresses=addresses)
             if input_modules:
                 self.tester.toggle_output(self.DEBIAN_DISCOVER_INPUT, delay=0.5)
-                log_output += self.assert_modules(module_amounts={'I': 1}, addresses=addresses)
+                new_modules += self.watch_module_discovery_log(module_amounts={'I': 1}, addresses=addresses)
             if can_controls:
                 self.tester.toggle_output(self.DEBIAN_DISCOVER_CAN_CONTROL, delay=0.5)
                 module_amounts = {'C': 1}
                 if ucans:
                     module_amounts.update({'I': 1, 'T': 1})
-                log_output += self.assert_modules(module_amounts=module_amounts, addresses=addresses)
-            return log_output
+                new_modules += self.watch_module_discovery_log(module_amounts=module_amounts, addresses=addresses)
+            new_module_addresses = set(module['address'] for module in new_modules)
         finally:
             self.module_discover_stop()
 
-    def assert_modules(self, module_amounts, timeout=10, addresses=None):
+        while since > time.time() - timeout:
+            data = self.dut.get('/get_modules_information')
+            synced_addresses = set(data['modules']['master'].keys())
+            if new_module_addresses.issubset(synced_addresses):
+                return True
+        raise AssertionError('Did not discover required modules')
+
+    def add_virtual_modules(self, module_amounts, timeout=120):
+        since = time.time()
+        desired_new_outputs = module_amounts.get('o', 0)
+        desired_new_inputs = module_amounts.get('i', 0)
+
+        def _get_current_virtual_modules():
+            virtual_modules = {}
+            data = self.dut.get('/get_modules_information')
+            for entry in data['modules']['master'].values():
+                if entry['is_virtual']:
+                    virtual_modules.setdefault(entry['type'], set()).add(entry['address'])
+            return virtual_modules
+        previous_virtual_modules = _get_current_virtual_modules()
+
+        for _ in range(desired_new_outputs):
+            self.dut.get('/add_virtual_output')
+        for _ in range(desired_new_inputs):
+            self.dut.get('/add_virtual_input')
+        # TODO: We should/could use the module discover log as well, but adding virtual modules isn't generate events
+
+        while since > time.time() - timeout:
+            current_virtual_modules = _get_current_virtual_modules()
+            new_outputs = len(current_virtual_modules.get('o', set()) - previous_virtual_modules.get('o', set()))
+            new_inputs = len(current_virtual_modules.get('i', set()) - previous_virtual_modules.get('i', set()))
+            if new_outputs == desired_new_outputs and new_inputs == desired_new_inputs:
+                return True
+            time.sleep(5)
+        raise AssertionError('Did not discover required virtual modules')
+
+    def clear_module_discovery_log(self):
+        self.dut.get('/get_module_log')
+
+    def watch_module_discovery_log(self, module_amounts, timeout=10, addresses=None):
         # type: (Dict[str, int], float, Optional[List[str]]) -> List[Dict[str, Any]]
 
         def format_module_amounts(amounts):
             return ', '.join('{}={}'.format(mtype, amount) for mtype, amount in amounts.items())
 
         since = time.time()
-        log_output = []
+        all_entries = []
+        desired_entries = []
         found_module_amounts = {}
         if addresses is None:
             addresses = []
@@ -400,7 +443,7 @@ class Toolbox(object):
             #              'category': '<SHUTTER|INTPUT|OUTPUT>',
             #              'module_type': '<I|O|T|D|i|o|t|d|C>,
             #              'address': '<module address>'}
-            log_output += log
+            all_entries += log
             for entry in log:
                 if entry['code'] in ['DUPLICATE', 'UNKNOWN']:
                     continue
@@ -413,15 +456,16 @@ class Toolbox(object):
                     if module_type not in found_module_amounts:
                         found_module_amounts[module_type] = 0
                     found_module_amounts[module_type] += 1
+                    desired_entries.append(entry)
                     logger.debug('Discovered {} module: {} ({})'.format(entry['code'],
                                                                         entry['module_type'],
                                                                         entry['address']))
             if found_module_amounts == module_amounts:
                 logger.debug('Discovered required modules: {}'.format(format_module_amounts(found_module_amounts)))
-                return log_output
+                return desired_entries
             time.sleep(2)
         raise AssertionError('Did not discover required modules: {}. Raw log: {}'.format(
-            format_module_amounts(module_amounts), log_output
+            format_module_amounts(module_amounts), all_entries
         ))
 
     def discover_energy_module(self):

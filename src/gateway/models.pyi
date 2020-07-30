@@ -154,6 +154,17 @@ class GroupAction(BaseModel):
     number: MixedIntegerField
 
 
+class Module(BaseModel):
+    id: MixedPrimaryKeyField
+    source: Literal['master', 'gateway']
+    address: str
+    module_type: Optional[Literal['sensor', 'input', 'output', 'shutter', 'dim_control', 'can_control', 'energy', 'power', 'p1_concentrator']]
+    hardware_type: Literal['physical', 'emulated', 'virtual']
+    firmware_version: Optional[str]
+    hardware_version: Optional[str]
+    order = Optional[MixedIntegerField]
+
+
 class ThermostatGroup(BaseModel):
     id: MixedPrimaryKeyField
     number: MixedIntegerField

@@ -36,6 +36,7 @@ from gateway.shutter_controller import ShutterController
 from gateway.thermostat.thermostat_controller import ThermostatController
 from gateway.users import UserController
 from gateway.webservice import WebInterface
+from gateway.module_controller import ModuleController
 from ioc import SetTestMode, SetUpTestInjections
 
 
@@ -61,7 +62,8 @@ class WebInterfaceTest(unittest.TestCase):
                             sensor_controller=mock.Mock(SensorController),
                             shutter_controller=mock.Mock(ShutterController),
                             thermostat_controller=mock.Mock(ThermostatController),
-                            user_controller=mock.Mock(UserController))
+                            user_controller=mock.Mock(UserController),
+                            module_controller=mock.Mock(ModuleController))
         self.web = WebInterface()
 
     def test_output_status(self):

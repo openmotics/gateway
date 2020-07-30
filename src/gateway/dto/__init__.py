@@ -25,3 +25,4 @@ from gateway.dto.input import InputDTO
 from gateway.dto.sensor import SensorDTO
 from gateway.dto.pulse_counter import PulseCounterDTO
 from gateway.dto.group_action import GroupActionDTO
+from gateway.dto.module import ModuleDTO

@@ -47,6 +47,7 @@ if False:  # MYPY
     from gateway.pulse_counter_controller import PulseCounterController
     from gateway.group_action_controller import GroupActionController
     from gateway.watchdog import Watchdog
+    from gateway.module_controller import ModuleController
     from gateway.comm_led_controller import CommunicationLedController
     from gateway.hal.master_controller import MasterController
     from gateway.hal.frontpanel_controller import FrontpanelController
@@ -150,7 +151,8 @@ class OpenmoticsService(object):
                 sensor_controller=INJECTED,  # type: SensorController
                 shutter_controller=INJECTED,  # type: ShutterController
                 group_action_controller=INJECTED,  # type: GroupActionController
-                frontpanel_controller=INJECTED  # type: FrontpanelController
+                frontpanel_controller=INJECTED,  # type: FrontpanelController
+                module_controller=INJECTED  # type: ModuleController
             ):
         """ Main function. """
         logger.info('Starting OM core service...')
@@ -159,11 +161,11 @@ class OpenmoticsService(object):
         master_controller.start()
 
         # Sync ORM with sources of thruth
-        output_controller.sync_orm()
-        input_controller.sync_orm()
-        pulse_counter_controller.sync_orm()
-        sensor_controller.sync_orm()
-        shutter_controller.sync_orm()
+        output_controller.run_sync_orm()
+        input_controller.run_sync_orm()
+        pulse_counter_controller.run_sync_orm()
+        sensor_controller.run_sync_orm()
+        shutter_controller.run_sync_orm()
 
         # Execute master migration(s)
         RoomsMigrator.migrate()
@@ -177,6 +179,7 @@ class OpenmoticsService(object):
         if passthrough_service:
             passthrough_service.start()
         scheduling_controller.start()
+        module_controller.start()
         thermostat_controller.start()
         metrics_collector.start()
         web_service.start()

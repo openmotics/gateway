@@ -19,22 +19,26 @@ calls to the PowerCommunicator.
 
 from __future__ import absolute_import
 
-from ioc import INJECTED, Inject, Injectable, Singleton
+from ioc import INJECTED, Inject
 from power import power_api
 from power.power_api import NUM_PORTS, P1_CONCENTRATOR
+from gateway.dto import ModuleDTO
+from serial_utils import CommunicationTimedOutException
 
 if False:  # MYPY
     from typing import Any, Dict, List, Optional, Tuple
     from power.power_communicator import PowerCommunicator
+    from power.power_store import PowerStore
 
 
 class PowerController(object):
     """ The PowerController abstracts calls to the communicator. """
 
     @Inject
-    def __init__(self, power_communicator=INJECTED):
-        # type: (PowerCommunicator) -> None
+    def __init__(self, power_communicator=INJECTED, power_store=INJECTED):
+        # type: (PowerCommunicator, PowerStore) -> None
         self._power_communicator = power_communicator
+        self._power_store = power_store
 
     def get_module_current(self, module, phase=None):
         # type: (Dict[str,Any], Optional[int]) -> Tuple[Any, ...]
@@ -73,6 +77,36 @@ class PowerController(object):
         else:
             cmd = power_api.get_night_energy(module['version'])
             return self._power_communicator.do_command(module['address'], cmd)
+
+    def get_modules_information(self):
+        # type: () -> List[ModuleDTO]
+        information = []
+        module_type_map = {power_api.ENERGY_MODULE: ModuleDTO.ModuleType.ENERGY,
+                           power_api.POWER_MODULE: ModuleDTO.ModuleType.POWER,
+                           power_api.P1_CONCENTRATOR: ModuleDTO.ModuleType.P1_CONCENTRATOR}
+
+        # Energy/power modules
+        if self._power_communicator is not None and self._power_store is not None:
+            modules = self._power_store.get_power_modules().values()
+            for module in modules:
+                module_address = module['address']
+                module_version = module['version']
+                try:
+                    raw_version = self._power_communicator.do_command(module_address, power_api.get_version(module_version))[0]
+                    version_info = raw_version.split('\x00', 1)[0].split('_')
+                    firmware_version = '{0}.{1}.{2}'.format(version_info[1], version_info[2], version_info[3])  # type: Optional[str]
+                    online = True
+                except CommunicationTimedOutException:
+                    firmware_version = None
+                    online = False
+                information.append(ModuleDTO(source=ModuleDTO.Source.GATEWAY,
+                                             address=str(module_address),
+                                             module_type=module_type_map.get(module['version']),
+                                             hardware_type=ModuleDTO.HardwareType.PHYSICAL,
+                                             firmware_version=firmware_version,
+                                             order=module['id'],  # TODO: Will be removed once Energy modules are in the ORM
+                                             online=online))
+        return information
 
 
 class P1Controller(object):

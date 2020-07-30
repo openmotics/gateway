@@ -180,49 +180,6 @@ class GatewayApi(object):
         # TODO: do we want to include non-master managed "modules" ? e.g. plugin outputs
         return self.__master_controller.get_modules()
 
-    def get_master_modules_information(self, address=None):
-        return self.__master_controller.get_modules_information(address)
-
-    def get_energy_modules_information(self, address=None):
-        information = {}
-        if address is not None:
-            try:
-                address = int(address)
-            except ValueError:
-                pass  # It was most likely a master slave address
-
-        def get_energy_module_type(version):
-            if version == power_api.ENERGY_MODULE:
-                return 'E'
-            if version == power_api.POWER_MODULE:
-                return 'P'
-            if version == power_api.P1_CONCENTRATOR:
-                return 'C'
-            return 'U'
-
-        # Energy/power modules
-        if self.__power_communicator is not None and self.__power_store is not None:
-            modules = self.__power_store.get_power_modules().values()
-            for module in modules:
-                module_address = module['address']
-                if address is not None and module_address != address:
-                    continue
-                module_version = module['version']
-                raw_version = self.__power_communicator.do_command(module_address, power_api.get_version(module_version))[0]
-                version_info = raw_version.split('\x00', 1)[0].split('_')
-                firmware_version = '{0}.{1}.{2}'.format(version_info[1], version_info[2], version_info[3])
-                information[module_address] = {'type': get_energy_module_type(module['version']),
-                                               'firmware': firmware_version,
-                                               'address': module_address,
-                                               'id': module['id']}
-        return information
-
-    def get_modules_information(self, address=None):
-        """ Gets module information """
-        information = {'master': self.get_master_modules_information(address),
-                       'energy': self.get_energy_modules_information(address)}
-        return information
-
     def flash_leds(self, led_type, led_id):
         return self.__master_controller.flash_leds(led_type, led_id)
 

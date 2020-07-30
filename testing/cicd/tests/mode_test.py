@@ -166,8 +166,8 @@ def test_factory_reset(toolbox, authorized_mode, factory_reset):
     assert {'I', 'O'} == set(x['type'] for x in modules)
     assert None not in [x['firmware'] for x in modules]
 
-    toolbox.dut.get('/add_virtual_output')
-    time.sleep(2)
+    toolbox.add_virtual_modules(module_amounts={'o': 1})
+
     data = toolbox.dut.get('/get_modules_information')
     modules = list(data['modules']['master'].values())
     assert {'I', 'O', 'o'} == set(x['type'] for x in modules)

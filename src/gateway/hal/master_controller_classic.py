@@ -28,7 +28,7 @@ import six
 
 from gateway.daemon_thread import DaemonThread, DaemonThreadWait
 from gateway.dto import GroupActionDTO, InputDTO, OutputDTO, PulseCounterDTO, \
-    SensorDTO, ShutterDTO, ShutterGroupDTO, ThermostatDTO
+    SensorDTO, ShutterDTO, ShutterGroupDTO, ThermostatDTO, ModuleDTO
 from gateway.enums import ShutterEnums
 from gateway.hal.mappers_classic import GroupActionMapper, InputMapper, \
     OutputMapper, PulseCounterMapper, SensorMapper, ShutterGroupMapper, \
@@ -986,11 +986,8 @@ class MasterClassicController(MasterController):
                                                     ord(address_bytes[3]))
 
     @communication_enabled
-    def get_modules_information(self, address=None):
+    def get_modules_information(self):  # type: () -> List[ModuleDTO]
         """ Gets module information """
-
-        def get_address(eeprom_address):
-            return self._eeprom_controller.read_address(eeprom_address)
 
         def get_master_version(_module_address):
             try:
@@ -999,69 +996,116 @@ class MasterClassicController(MasterController):
                                                                        extended_crc=True,
                                                                        timeout=5)
                 _firmware_version = '{0}.{1}.{2}'.format(_module_version['f1'], _module_version['f2'], _module_version['f3'])
-                return _module_version['hw_version'], _firmware_version
+                return True, _module_version['hw_version'], _firmware_version
             except CommunicationTimedOutException:
-                return None, None
+                return False, None, None
 
-        information = {}
-        if address is not None:
-            address = str(address)  # Make sure it's the same type
+        information = []
+        module_type_lookup = {'c': ModuleDTO.ModuleType.CAN_CONTROL,
+                              't': ModuleDTO.ModuleType.SENSOR,
+                              'i': ModuleDTO.ModuleType.INPUT,
+                              'o': ModuleDTO.ModuleType.OUTPUT,
+                              'r': ModuleDTO.ModuleType.SHUTTER,
+                              'd': ModuleDTO.ModuleType.DIM_CONTROL}
 
-        # Master slave modules
         no_modules = self._master_communicator.do_command(master_api.number_of_io_modules())
         for i in range(no_modules['in']):
             is_can = self._eeprom_controller.read_address(EepromAddress(2 + i, 252, 1)).bytes == 'C'
-            module_address = get_address(EepromAddress(2 + i, 0, 4))
+            module_address = self._eeprom_controller.read_address(EepromAddress(2 + i, 0, 4))
+            module_type_letter = module_address.bytes[0].lower()
             is_virtual = module_address.bytes[0].islower()
             formatted_address = MasterClassicController._format_address(module_address.bytes)
-            if address is not None and formatted_address != address:
-                continue
-            data = {'type': module_address.bytes[0],
-                    'address': formatted_address,
-                    'is_can': is_can,
-                    'is_virtual': is_virtual,
-                    'module_nr': i,
-                    'category': 'INPUT'}
-            if not is_virtual and (module_address.bytes[0] == 'C' or not is_can):
-                hardware_version, firmware_version = get_master_version(module_address)
-                data.update({'hardware': hardware_version,
-                             'firmware': firmware_version})
-            information[formatted_address] = data
+            hardware_type = ModuleDTO.HardwareType.PHYSICAL
+            if is_virtual:
+                hardware_type = ModuleDTO.HardwareType.VIRTUAL
+            elif is_can and module_type_letter != 'c':
+                hardware_type = ModuleDTO.HardwareType.EMULATED
+            dto = ModuleDTO(source=ModuleDTO.Source.MASTER,
+                            address=formatted_address,
+                            module_type=module_type_lookup.get(module_type_letter),
+                            hardware_type=hardware_type,
+                            order=i)
+            if hardware_type == ModuleDTO.HardwareType.PHYSICAL:
+                dto.online, dto.hardware_version, dto.firmware_version = get_master_version(module_address)
+            information.append(dto)
 
         for i in range(no_modules['out']):
-            module_address = get_address(EepromAddress(33 + i, 0, 4))
+            module_address = self._eeprom_controller.read_address(EepromAddress(33 + i, 0, 4))
+            module_type_letter = module_address.bytes[0].lower()
             is_virtual = module_address.bytes[0].islower()
             formatted_address = MasterClassicController._format_address(module_address.bytes)
-            if address is not None and formatted_address != address:
-                continue
-            data = {'type': module_address.bytes[0],
-                    'address': formatted_address,
-                    'is_virtual': is_virtual,
-                    'module_nr': i,
-                    'category': 'OUTPUT'}
+            dto = ModuleDTO(source=ModuleDTO.Source.MASTER,
+                            address=formatted_address,
+                            module_type=module_type_lookup.get(module_type_letter),
+                            hardware_type=(ModuleDTO.HardwareType.VIRTUAL if is_virtual else
+                                           ModuleDTO.HardwareType.PHYSICAL),
+                            order=i)
             if not is_virtual:
-                hardware_version, firmware_version = get_master_version(module_address)
-                data.update({'hardware': hardware_version,
-                             'firmware': firmware_version})
-            information[formatted_address] = data
+                dto.online, dto.hardware_version, dto.firmware_version = get_master_version(module_address)
+            information.append(dto)
+
         for i in range(no_modules['shutter']):
-            module_address = get_address(EepromAddress(33 + i, 173, 4))
+            module_address = self._eeprom_controller.read_address(EepromAddress(33 + i, 173, 4))
+            module_type_letter = module_address.bytes[0].lower()
             is_virtual = module_address.bytes[0].islower()
             formatted_address = MasterClassicController._format_address(module_address.bytes)
-            if address is not None and formatted_address != address:
-                continue
-            data = {'type': module_address.bytes[0],
-                    'address': formatted_address,
-                    'is_virtual': is_virtual,
-                    'module_nr': i,
-                    'category': 'SHUTTER'}
+            dto = ModuleDTO(source=ModuleDTO.Source.MASTER,
+                            address=formatted_address,
+                            module_type=module_type_lookup.get(module_type_letter),
+                            hardware_type=(ModuleDTO.HardwareType.VIRTUAL if is_virtual else
+                                           ModuleDTO.HardwareType.PHYSICAL),
+                            order=i)
             if not is_virtual:
-                hardware_version, firmware_version = get_master_version(module_address)
-                data.update({'hardware': hardware_version,
-                             'firmware': firmware_version})
-            information[formatted_address] = data
+                dto.online, dto.hardware_version, dto.firmware_version = get_master_version(module_address)
+            information.append(dto)
 
         return information
+
+    def replace_module(self, old_address, new_address):  # type: (str, str) -> None
+        old_address_bytes = ''.join(chr(int(part)) for part in old_address.split('.'))
+        new_address_bytes = ''.join(chr(int(part)) for part in new_address.split('.'))
+        no_modules = self._master_communicator.do_command(master_api.number_of_io_modules())
+
+        amount_of_inputs = no_modules['in']
+        for i in range(amount_of_inputs):
+            eeprom_address = EepromAddress(2 + i, 0, 4)
+            module_address = self._eeprom_controller.read_address(eeprom_address).bytes
+            if module_address == old_address_bytes:
+                new_module_address = self._eeprom_controller.read_address(EepromAddress(2 + amount_of_inputs - 1, 0, 4)).bytes
+                if new_module_address == new_address_bytes:
+                    self._eeprom_controller.write_address(eeprom_address, new_address_bytes)
+                    self._eeprom_controller.write_address(EepromAddress(0, 1, 1), chr(amount_of_inputs - 1))
+                    self._eeprom_controller.activate()
+                    logger.warn('Replaced {0} by {1}'.format(old_address, new_address))
+                    return
+
+        amount_of_outputs = no_modules['out']
+        for i in range(amount_of_outputs):
+            eeprom_address = EepromAddress(33 + i, 0, 4)
+            module_address = self._eeprom_controller.read_address(eeprom_address).bytes
+            if module_address == old_address_bytes:
+                new_module_address = self._eeprom_controller.read_address(EepromAddress(33 + amount_of_outputs - 1, 0, 4)).bytes
+                if new_module_address == new_address_bytes:
+                    self._eeprom_controller.write_address(eeprom_address, new_address_bytes)
+                    self._eeprom_controller.write_address(EepromAddress(0, 2, 1), chr(amount_of_outputs - 1))
+                    self._eeprom_controller.activate()
+                    logger.warn('Replaced {0} by {1}'.format(old_address, new_address))
+                    return
+
+        amount_of_shutters = no_modules['shutter']
+        for i in range(amount_of_shutters):
+            eeprom_address = EepromAddress(33 + i, 173, 4)
+            module_address = self._eeprom_controller.read_address(eeprom_address).bytes
+            if module_address == old_address_bytes:
+                new_module_address = self._eeprom_controller.read_address(EepromAddress(33 + amount_of_shutters - 1, 173, 4)).bytes
+                if new_module_address == new_address_bytes:
+                    self._eeprom_controller.write_address(eeprom_address, new_address_bytes)
+                    self._eeprom_controller.write_address(EepromAddress(0, 3, 1), chr(amount_of_shutters - 1))
+                    self._eeprom_controller.activate()
+                    logger.warn('Replaced {0} by {1}'.format(old_address, new_address))
+                    return
+
+        raise RuntimeError('Could not correctly match modules {0} and {1}'.format(old_address, new_address))
 
     @communication_enabled
     def flash_leds(self, led_type, led_id):

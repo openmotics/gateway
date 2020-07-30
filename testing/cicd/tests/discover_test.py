@@ -29,7 +29,7 @@ def discover_mode(request, toolbox):
 @pytest.mark.unstable
 def test_output_module(toolbox, discover_mode):
     toolbox.tester.toggle_output(toolbox.DEBIAN_DISCOVER_OUTPUT)
-    modules = toolbox.assert_modules(module_amounts={'O': 1})
+    modules = toolbox.watch_module_discovery_log(module_amounts={'O': 1})
     assert 'EXISTING: O' in ['{0}: {1}'.format(entry['code'], entry['module_type'])
                              for entry in modules]
 
@@ -37,7 +37,7 @@ def test_output_module(toolbox, discover_mode):
 @pytest.mark.unstable
 def test_input_module(toolbox, discover_mode):
     toolbox.tester.toggle_output(toolbox.DEBIAN_DISCOVER_INPUT)
-    modules = toolbox.assert_modules(module_amounts={'I': 1})
+    modules = toolbox.watch_module_discovery_log(module_amounts={'I': 1})
     assert 'EXISTING: I' in ['{0}: {1}'.format(entry['code'], entry['module_type'])
                              for entry in modules]
 
@@ -45,7 +45,7 @@ def test_input_module(toolbox, discover_mode):
 @pytest.mark.unstable
 def test_can_control(toolbox, discover_mode):
     toolbox.tester.toggle_output(toolbox.DEBIAN_DISCOVER_CAN_CONTROL)
-    modules = toolbox.assert_modules(module_amounts={'C': 1, 'I': 1, 'T': 1})  # CAN Control, emulated Input modudule and emulated Temperature module
+    modules = toolbox.watch_module_discovery_log(module_amounts={'C': 1, 'I': 1, 'T': 1})  # CAN Control, emulated Input modudule and emulated Temperature module
     parsed_output = ['{0}: {1}'.format(entry['code'], entry['module_type'])
                      for entry in modules]
     assert 'EXISTING: C' in parsed_output

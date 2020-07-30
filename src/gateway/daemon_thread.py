@@ -56,7 +56,6 @@ class DaemonThread(object):
 
     def sleep(self, timeout):
         # type: (float) -> None
-        self._tick.clear()
         self._tick.wait(timeout)
 
     def set_interval(self, interval):
@@ -78,6 +77,7 @@ class DaemonThread(object):
                 logger.info('Aborting daemon {}'.format(self._name))
                 return
             try:
+                self._tick.clear()
                 self._target()
                 if self._interval > 0:
                     min_wait_time = 0.1 if self._interval >= 0.5 else 0.05
