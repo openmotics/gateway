@@ -92,16 +92,19 @@ class PulseCounterController(BaseController):
             if pulse_counter.source not in ['master', 'gateway']:
                 logger.warning('Trying to save a PulseCounter with unknown source {0}'.format(pulse_counter.source))
                 continue
-            pulse_counter = PulseCounterMapper.dto_to_orm(pulse_counter_dto, fields)
-            if 'room' in fields:
-                if pulse_counter_dto.room is None:
-                    pulse_counter.room = None
-                elif 0 <= pulse_counter_dto.room <= 100:
-                    pulse_counter.room, _ = Room.get_or_create(number=pulse_counter_dto.room)
-            pulse_counter.save()
-            if pulse_counter.source == 'master':
-                # Only master pulse counters will be passed to the MasterController batch save
-                master_backed_pulse_counters.append((pulse_counter_dto, fields))
+            try:
+                pulse_counter = PulseCounterMapper.dto_to_orm(pulse_counter_dto, fields)
+                if 'room' in fields:
+                    if pulse_counter_dto.room is None:
+                        pulse_counter.room = None
+                    elif 0 <= pulse_counter_dto.room <= 100:
+                        pulse_counter.room, _ = Room.get_or_create(number=pulse_counter_dto.room)
+                pulse_counter.save()
+                if pulse_counter.source == 'master':  # also save on the master if needed
+                    master_backed_pulse_counters.append((pulse_counter_dto, fields))
+            except ValueError as e:
+                logger.error('Could not save pulse counter with id {0}: {1}'.format(pulse_counter_dto.id, e))
+                continue
         # batch save the master pulse counters for performance reasons
         self._master_controller.save_pulse_counters(master_backed_pulse_counters)
 

@@ -35,14 +35,20 @@ class PulseCounterMapper(object):
 
     @staticmethod
     def dto_to_orm(pulse_counter_dto, fields):  # type: (PulseCounterDTO, List[str]) -> PulseCounter
-        pulse_counter = PulseCounter.get_or_none(number=pulse_counter_dto.id)
+        pc_number = pulse_counter_dto.id
+        pulse_counter = PulseCounter.get_or_none(number=pc_number)
         if pulse_counter is None:
-            pulse_counter = PulseCounter(number=pulse_counter_dto.id,
+            pulse_counter = PulseCounter(number=pc_number,
                                          name='',
                                          source='gateway',
                                          persistent=False)
         if 'name' in fields:
             pulse_counter.name = pulse_counter_dto.name
         if 'persistent' in fields:
+            if pulse_counter.source == 'master' and pulse_counter_dto.persistent:
+                raise ValueError(
+                    'Persistence is not supported on pulse counter with number {} (id: {}, source: {})'.format(pc_number,
+                                                                                                               pulse_counter.id,
+                                                                                                               pulse_counter.source))
             pulse_counter.persistent = pulse_counter_dto.persistent
         return pulse_counter
