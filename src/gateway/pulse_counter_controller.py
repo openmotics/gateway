@@ -75,28 +75,26 @@ class PulseCounterController(BaseController):
         return pulse_counter_dtos
 
     def save_pulse_counters(self, pulse_counters):  # type: (List[Tuple[PulseCounterDTO, List[str]]]) -> None
-        pulse_counters_to_save = []
+        master_backed_pulse_counters = []
         for pulse_counter_dto, fields in pulse_counters:
             pulse_counter = PulseCounter.get_or_none(number=pulse_counter_dto.id)  # type: PulseCounter
             if pulse_counter is None:
                 raise DoesNotExist('A PulseCounter with id {0} could not be found'.format(pulse_counter_dto.id))
-            if pulse_counter.source == 'master':
-                # Only master pulse counters will be passed to the MasterController batch save
-                pulse_counters_to_save.append((pulse_counter_dto, fields))
-                if 'name' in fields:
-                    pulse_counter.name = pulse_counter_dto.name
-            elif pulse_counter.source == 'gateway':
-                pulse_counter = PulseCounterMapper.dto_to_orm(pulse_counter_dto, fields)
-            else:
+            if pulse_counter.source not in ['master', 'gateway']:
                 logger.warning('Trying to save a PulseCounter with unknown source {0}'.format(pulse_counter.source))
                 continue
+            pulse_counter = PulseCounterMapper.dto_to_orm(pulse_counter_dto, fields)
             if 'room' in fields:
                 if pulse_counter_dto.room is None:
                     pulse_counter.room = None
                 elif 0 <= pulse_counter_dto.room <= 100:
                     pulse_counter.room, _ = Room.get_or_create(number=pulse_counter_dto.room)
             pulse_counter.save()
-        self._master_controller.save_pulse_counters(pulse_counters_to_save)
+            if pulse_counter.source == 'master':
+                # Only master pulse counters will be passed to the MasterController batch save
+                master_backed_pulse_counters.append((pulse_counter_dto, fields))
+        # batch save the master pulse counters for performance reasons
+        self._master_controller.save_pulse_counters(master_backed_pulse_counters)
 
     def set_amount_of_pulse_counters(self, amount):  # type: (int) -> int
         _ = self
