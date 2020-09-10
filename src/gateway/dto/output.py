@@ -64,6 +64,9 @@ class OutputDTO(BaseDTO):
                 self.can_led_3 == other.can_led_3 and
                 self.can_led_4 == other.can_led_4)
 
+    def __str__(self):
+        return 'OutputDTO: {}'.format(vars(self))
+
 
 class OutputStateDTO(BaseDTO):
     def __init__(self, id, status=False, ctimer=0, dimmer=0, locked=False):

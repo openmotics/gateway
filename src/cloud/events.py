@@ -55,6 +55,7 @@ class EventSender(object):
         self._events_thread.stop()
 
     def enqueue_event(self, event):
+        logger.debug("@> EventSender | enqueue_event | {}".format(locals()))
         if self._is_enabled(event):
             event.data['timestamp'] = time.time()
             self._queue.appendleft(event)

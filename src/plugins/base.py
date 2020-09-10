@@ -326,6 +326,7 @@ class PluginController(object):
                 yield runner
 
     def process_observer_event(self, event):
+        # logger.debug("@> base | pluginController | process_observer_event | {}".format(locals()))
         if event.type == GatewayEvent.Types.INPUT_CHANGE:
             # Should be called when the input status changes, notifies all plugins.
             for runner in self.__iter_running_runners():
@@ -334,6 +335,7 @@ class PluginController(object):
             # TODO: deprecate old versions that use state and move to events
             states = [(state.id, state.dimmer) for state in self.__output_controller.get_output_statuses() if state.status]
             for runner in self.__iter_running_runners():
+                # logger.debug("@> base | pluginController | process_observer_event | send notification to runner for both versions")
                 runner.process_output_status(data=states, action_version=1)  # send states as action version 1
                 runner.process_output_status(data=event, action_version=2)   # send event as action version 2
         if event.type == GatewayEvent.Types.SHUTTER_CHANGE:

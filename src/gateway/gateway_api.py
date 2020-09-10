@@ -196,6 +196,7 @@ class GatewayApi(object):
         # TODO: work with output controller
         # TODO: implement output controller and let her handle routing to either master or e.g. plugin based outputs
         self.__master_controller.set_output(output_id=output_id, state=is_on, dimmer=dimmer, timer=timer)
+        logger.debug("@> gateway api | set_output_status | {}".format(locals()))
 
     # Input functions
 

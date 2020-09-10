@@ -77,17 +77,21 @@ class OutputController(BaseController):
 
     def _handle_master_event(self, master_event):
         # type: (MasterEvent) -> None
+        # logger.debug('@> OutputController | _handle_master_event | {}'.format(locals()))
         super(OutputController, self)._handle_master_event(master_event)
         if master_event.type == MasterEvent.Types.MODULE_DISCOVERY:
             if self._sync_state_thread:
                 self._sync_state_thread.request_single_run()
         if master_event.type == MasterEvent.Types.OUTPUT_STATUS:
+            # logger.debug('@> OutputController | _handle_master_event | handle_output_status')
             self._handle_output_status(master_event.data)
 
     def _handle_output_status(self, change_data):
         # type: (Dict[str,Any]) -> None
+        # logger.debug('@> OutputController | _handle_output_status | {}'.format(locals()))
         changed = self._cache.handle_change(change_data['id'], change_data)
         if changed:
+            # logger.debug('@> OutputController | _publish_output_change | {}'.format(changed))
             self._publish_output_change(changed)
 
     def _sync_state(self):
@@ -107,6 +111,7 @@ class OutputController(BaseController):
 
     def _publish_output_change(self, output_dto):
         # type: (OutputDTO) -> None
+        logger.debug('@> OutputController | _publish_output_change | {}'.format(locals()))
         event_status = {'on': output_dto.state.status, 'locked': output_dto.state.locked}
         if output_dto.module_type in ['d', 'D']:
             event_status['value'] = output_dto.state.dimmer
@@ -116,7 +121,9 @@ class OutputController(BaseController):
         if self._message_client is not None:
             self._message_client.send_event(OMBusEvents.OUTPUT_CHANGE, {'id': output_dto.id})
         for callback in self._event_subscriptions:
-            callback(GatewayEvent(GatewayEvent.Types.OUTPUT_CHANGE, event_data))
+            gwe = GatewayEvent(GatewayEvent.Types.OUTPUT_CHANGE, event_data)
+            # logger.debug('@> OutputController | _publish_output_change | send gateway event to callbacks | {}'.format(gwe.__repr__()))
+            callback(gwe)
 
     def get_output_status(self, output_id):
         # type: (int) -> OutputStateDTO

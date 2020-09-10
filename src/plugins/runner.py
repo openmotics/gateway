@@ -165,16 +165,19 @@ class PluginRunner:
             self.logger('[Runner] Stopped')
 
     def process_input_status(self, input_event):
+        # logger.debug("@> runner | pluginRunner | process_input_status | vars: ({})".format(locals()))
         event_json = input_event.serialize()
         self._do_async(action='input_status', payload={'event': event_json}, should_filter=True)
 
     def process_output_status(self, data, action_version=1):
+        # logger.debug("@> runner | pluginRunner | process_output_status | vars: ({})".format(locals()))
         if action_version in [1, 2]:
             if action_version == 1:
                 payload = {'status': data}
             else:
                 event_json = data.serialize()
                 payload = {'event': event_json}
+            # logger.debug("@> runner | pluginRunner | process_output_status | sending out the output status | payload: {}".format(payload))
             self._do_async(action='output_status', payload=payload, should_filter=True, action_version=action_version)
         else:
             self.logger('Output status version {} not supported.'.format(action_version))
@@ -263,6 +266,7 @@ class PluginRunner:
             self.logger('[Runner] Unkown async message: {0}'.format(response))
 
     def _do_async(self, action, payload, should_filter=False, action_version=1):
+        # logger.debug("@> runner | pluginRunner | _do_async | vars: ({})".format(locals()))
         has_receiver = False
         for decorator_name, decorator_versions in six.iteritems(self._decorators_in_use):
             # the action version is linked to a specific decorator version
@@ -270,15 +274,18 @@ class PluginRunner:
         if not self._process_running or (should_filter and not has_receiver):
             return
         try:
+            # logger.debug("@> runner | pluginRunner | _do_async | put payload in queue")
             self._async_command_queue.put({'action': action, 'payload': payload, 'action_version': action_version}, block=False)
         except Full:
             self.logger('Async action cannot be queued, queue is full')
 
     def _perform_async_commands(self):
+        # logger.debug("@> runner | pluginRunner | _perform_async_commands")
         while self._process_running:
             try:
                 # Give it a timeout in order to check whether the plugin is not stopped.
                 command = self._async_command_queue.get(block=True, timeout=10)
+                # logger.debug("@> runner | pluginRunner | _perform_async_commands | reading info from queue | {}".format(command))
                 self._do_command(command['action'], payload=command['payload'], action_version=command['action_version'])
             except Empty:
                 self._do_async('ping', {})
@@ -286,6 +293,7 @@ class PluginRunner:
                 self.logger('[Runner] Failed to perform async command: {0}'.format(exception))
 
     def _do_command(self, action, payload=None, timeout=None, action_version=1):
+        # logger.debug("@> runner | pluginRunner | _do_command | {}".format(locals()))
         if payload is None:
             payload = {}
         self._commands_executed += 1
@@ -298,6 +306,7 @@ class PluginRunner:
         with self._command_lock:
             try:
                 command = self._create_command(action, payload, action_version)
+                # logger.debug("@> runner | pluginRunner | _do_command | Writing command to STDIN | {}".format(command))
                 self._proc.stdin.write(PluginIPCStream.write(command))
                 self._proc.stdin.flush()
             except Exception:

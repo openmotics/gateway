@@ -84,7 +84,7 @@ class DaemonThread(object):
                     self.sleep(max(min_wait_time, self._interval - (time.time() - start)))
                 backoff = 0
             except DaemonThreadWait:
-                logger.debug('Waiting {} seconds'.format(self._delay))
+                # logger.debug('Waiting {} seconds'.format(self._delay))
                 self.sleep(self._delay)
             except Exception as ex:
                 logger.exception('Unexpected error in daemon {}: {}'.format(self._name, ex))

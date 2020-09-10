@@ -193,6 +193,7 @@ class MasterCommunicator(object):
         :param consumer: The consumer to register.
         :type consumer: Consumer or BackgroundConsumer.
         """
+        # logger.debug("@> MasterCommunicator | register_consumer | {}".format(locals()))
         self.__consumers.append(consumer)
 
     def do_basic_action(self, action_type, action_number, timeout=2):
@@ -512,6 +513,7 @@ class Consumer(object):
     matches the consumer, the output will unblock the get() caller. """
 
     def __init__(self, cmd, cid):
+        # logger.debug("@> masterCommunicator | consumer | init: {}".format(locals()))
         self.cmd = cmd  # type: MasterCommandSpec
         self.cid = cid  # type: int
         self.__queue = Queue()
@@ -521,6 +523,7 @@ class Consumer(object):
         return self.cmd.output_action + bytearray([self.cid])
 
     def consume(self, data, partial_result):
+        # logger.debug("@> masterCommunicator | consumer | consume: {}".format(locals()))
         # type: (bytearray, Optional[Result]) -> Tuple[int, Result, bool]
         """ Consume data. """
         return self.cmd.consume_output(data, partial_result)
@@ -559,6 +562,7 @@ class BackgroundConsumer(object):
         :param callback: function to call when an instance was found.
         :param send_to_passthrough: whether to send the command to the passthrough.
         """
+        # logger.debug("@> masterCommunicator | backroundConsumer | init: {}".format(locals()))
         self.cmd = cmd
         self.cid = cid
         self.callback = callback
@@ -573,6 +577,7 @@ class BackgroundConsumer(object):
     def consume(self, data, partial_result):
         # type: (bytearray, Optional[Result]) -> Tuple[int, Result, bool]
         """ Consume data. """
+        # logger.debug("@> masterCommunicator | backgroundConsumer | consume: {}".format(locals()))
         (bytes_consumed, last_result, done) = self.cmd.consume_output(data, partial_result)
         self.last_cmd_data = (self.get_prefix() + last_result.actual_bytes) if done else None
         return bytes_consumed, last_result, done
@@ -580,6 +585,7 @@ class BackgroundConsumer(object):
     def deliver(self, output):
         # type: (Result) -> None
         """ Deliver output to the thread waiting on get(). """
+        # logger.debug("@> masterCommunicator | backgroundConsumer | deliver: {}".format(locals()))
         try:
             self.callback(output)
         except Exception:

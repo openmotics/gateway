@@ -108,6 +108,7 @@ class MasterClassicController(MasterController):
         self._discover_mode_timer = None  # type: Optional[Timer]
         self._module_log = []  # type: List[Dict[str, Any]]
 
+        logger.debug("@> MasterClassicController | init | {}".format(locals()))
         self._master_communicator.register_consumer(
             BackgroundConsumer(master_api.output_list(), 0, self._on_master_output_event, True)
         )
@@ -305,12 +306,15 @@ class MasterClassicController(MasterController):
         # Publish status of all outputs. Since the event from the master contains
         # all outputs that are currently on, the output(s) that changed can't be
         # determined here.
+        logger.debug('@> master_controller_classic | _on_master_output_event | {}'.format(str(data)))
         state = {k: (False, 0) for k, v in self._output_config.items()}
         for output_id, dimmer in data['outputs']:
             state[output_id] = (True, dimmer)
         for output_id, (status, dimmer) in state.items():
             event_data = {'id': output_id, 'status': status, 'dimmer': dimmer}
-            self._publish_event(MasterEvent(event_type=MasterEvent.Types.OUTPUT_STATUS, data=event_data))
+            master_event = MasterEvent(event_type=MasterEvent.Types.OUTPUT_STATUS, data=event_data)
+            # logger.debug('@> master_controller_classic | _on_master_output_event | Publish_event | {}'.format(master_event.__repr__()))
+            self._publish_event(master_event)
 
     #######################
     # Internal management #
@@ -421,6 +425,7 @@ class MasterClassicController(MasterController):
         # type: (Dict[str,Any]) -> None
         """ Triggers when the master informs us of an Input state change """
         # Update status tracker
+        logger.debug('@> master_controller_classic | _on_master_input_change | {}'.format(str(data)))
         self._input_status.set_input(data)
 
     # Outputs
@@ -526,6 +531,7 @@ class MasterClassicController(MasterController):
     def _input_changed(self, input_id, status):
         # type: (int, str) -> None
         """ Executed by the Input Status tracker when an input changed state """
+        logger.debug('@> master_controller_classic | _input_changed | {}'.format(locals()))
         input_configuration = self._input_config.get(input_id)
         if input_configuration is None:
             # An event was received from an input for which the configuration was not yet loaded. As

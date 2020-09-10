@@ -645,6 +645,7 @@ class WebInterface(object):
         :param dimmer: The dimmer value to set, None if unchanged
         :param timer: The timer value to set, None if unchanged
         """
+        logger.debug("@> webservice | set_output | {}".format(locals()))
         self._gateway_api.set_output_status(id, is_on, dimmer, timer)
         return {}
 

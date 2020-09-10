@@ -16,10 +16,13 @@
 Module for communicating with the Master
 """
 from __future__ import absolute_import
+import logging
 
 from gateway.dto import GroupActionDTO, InputDTO, OutputDTO, PulseCounterDTO, \
     SensorDTO, ShutterDTO, ShutterGroupDTO, ThermostatDTO, ModuleDTO
 from gateway.hal.master_event import MasterEvent
+
+logger = logging.getLogger('openmotics')
 
 if False:  # MYPY
     from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -53,9 +56,11 @@ class MasterController(object):
     #################
 
     def subscribe_event(self, callback):  # type: (Callable[[MasterEvent], None]) -> None
+        # logger.debug("@> MasterController | subscribe_event | {}".format(locals()))
         self._event_callbacks.append(callback)
 
     def _publish_event(self, master_event):  # type: (MasterEvent) -> None
+        # logger.debug("@> MasterController | _publish_event | {}".format(locals()))
         for callback in self._event_callbacks:
             callback(master_event)
 
