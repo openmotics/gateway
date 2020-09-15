@@ -286,6 +286,29 @@ def types(**kwargs):
     return kwargs
 
 
+@cherrypy.popargs('output_id')
+class OutputApi(object):
+    @Inject
+    def __init__(self, output_controller=INJECTED):
+        # type: (OutputController) -> None
+        self._output_controller = output_controller
+
+    @openmotics_api(auth=True, methods=['GET'], check=types(output_id=int, fields='json'))
+    def index(self, output_id, fields=None):
+        # type: (int, Optional[List[str]]) -> Dict[str,Any]
+        output = self._output_controller.load_output(output_id)
+        return {'output': OutputSerializer.serialize(output_dto=output, fields=fields)}
+
+
+class ApiV1(object):
+    def __init__(self):
+        self.output = OutputApi()
+
+    @openmotics_api(auth=True)
+    def index(self):
+        return {'status': True}
+
+
 @Injectable.named('web_interface')
 @Singleton
 class WebInterface(object):
@@ -301,6 +324,7 @@ class WebInterface(object):
         """
         Constructor for the WebInterface.
         """
+        self.v1 = ApiV1()
         self._user_controller = user_controller  # type: UserController
         self._config_controller = configuration_controller  # type: ConfigurationController
         self._scheduling_controller = scheduling_controller  # type: SchedulingController
