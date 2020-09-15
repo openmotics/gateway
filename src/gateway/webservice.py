@@ -58,7 +58,7 @@ from power.power_communicator import InAddressModeException
 from serial_utils import CommunicationTimedOutException
 
 if False:
-    from typing import Dict, Optional, Any, List, Tuple
+    from typing import Dict, Optional, Any, List
     from bus.om_bus_client import MessageClient
     from gateway.config import ConfigurationController
     from gateway.gateway_api import GatewayApi
@@ -124,7 +124,8 @@ def error_unexpected():
 cherrypy.config.update({'error_page.404': error_generic,
                         'error_page.401': error_generic,
                         'error_page.503': error_generic,
-                        'request.error_response': error_unexpected})
+                        'request.error_response': error_unexpected,
+                        'tools.trailing_slash.on': False})
 
 
 def params_parser(params, param_types):
@@ -183,7 +184,8 @@ def cors_handler():
     cherrypy.response.headers['Access-Control-Allow-Methods'] = 'GET'
 
 
-def authentication_handler(pass_token=False):
+@Inject
+def authentication_handler(pass_token=False, user_controller=INJECTED):
     request = cherrypy.request
     if request.method == 'OPTIONS':
         return
@@ -204,10 +206,8 @@ def authentication_handler(pass_token=False):
                     token = base64.decodestring(base64_token).decode('utf-8')
                 except Exception:
                     pass
-        _self = request.handler.callable.__self__
         if request.remote.ip != '127.0.0.1':
-            check_token = _self._user_controller.check_token if hasattr(_self, '_user_controller') else _self.webinterface.check_token
-            if not check_token(token):
+            if not user_controller.check_token(token):
                 raise RuntimeError()
         if pass_token is True:
             request.params['token'] = token
