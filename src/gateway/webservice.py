@@ -266,12 +266,14 @@ def _openmotics_api(f, *args, **kwargs):
     return contents
 
 
-def openmotics_api(auth=False, check=None, pass_token=False, plugin_exposed=True, deprecated=None):
+def openmotics_api(auth=False, methods=None, check=None, pass_token=False, plugin_exposed=True, deprecated=None):
     def wrapper(func):
         func.deprecated = deprecated
         func = _openmotics_api(func)
         if auth is True:
             func = cherrypy.tools.authenticated(pass_token=pass_token)(func)
+        if methods:
+            func = cherrypy.tools.allow(methods=methods)(func)
         func = cherrypy.tools.params(**(check or {}))(func)
         func.exposed = True
         func.plugin_exposed = plugin_exposed
