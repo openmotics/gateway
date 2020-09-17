@@ -32,150 +32,2044 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-gateway.models">
-<span id="welcome-to-gateway-s-documentation"></span><h1>Welcome to gateway’s documentation!<a class="headerlink" href="#module-gateway.models" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="welcome-to-gateway-s-documentation">
+<h1>Welcome to gateway’s documentation!<a class="headerlink" href="#welcome-to-gateway-s-documentation" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="gateway.models.Floor">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Floor</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Floor" title="Permalink to this definition">¶</a></dt>
-<dd><p>A physical floor in the building the gateway is installed</p>
-<dl class="attribute">
-<dt id="gateway.models.Floor.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Floor.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">FloorDoesNotExist</span></code></p>
+<dt id="gateway.webservice.WebInterface">
+<em class="property">class </em><code class="descclassname">gateway.webservice.</code><code class="descname">WebInterface</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the web interface served by cherrypy.</p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.add_virtual_input">
+<code class="descname">add_virtual_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.add_virtual_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new virtual input module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict with ‘status’.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.add_virtual_output">
+<code class="descname">add_virtual_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.add_virtual_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new virtual output module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict with ‘status’.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.Input">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Input</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Input" title="Permalink to this definition">¶</a></dt>
-<dd><p>An input (e.g. a relay)</p>
-<dl class="attribute">
-<dt id="gateway.models.Input.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Input.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">InputDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.create_user">
+<code class="descname">create_user</code><span class="sig-paren">(</span><em>username</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new user using a username and a password. Only possible in authorized mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> (<em>str</em>) – Name of the user.</li>
+<li><strong>password</strong> (<em>str</em>) – Password of the user.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_basic_action">
+<code class="descname">do_basic_action</code><span class="sig-paren">(</span><em>action_type</em>, <em>action_number</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_basic_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a basic action.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>action_type</strong> (<em>int</em>) – The type of the action as defined by the master api.</li>
+<li><strong>action_number</strong> (<em>int</em>) – The number provided to the basic action, its meaning depends on the action_type.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.Module">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Module</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Module" title="Permalink to this definition">¶</a></dt>
-<dd><p>A hardware slave module attached to the gateway</p>
-<dl class="attribute">
-<dt id="gateway.models.Module.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Module.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ModuleDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_group_action">
+<code class="descname">do_group_action</code><span class="sig-paren">(</span><em>group_action_id</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_group_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a group action.
+:param group_action_id: The id of the group action</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_raw_energy_command">
+<code class="descname">do_raw_energy_command</code><span class="sig-paren">(</span><em>address</em>, <em>mode</em>, <em>command</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_raw_energy_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a raw energy module command, for debugging purposes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>address</strong> (<em>int</em>) – The address of the energy module</li>
+<li><strong>mode</strong> (<em>str</em>) – 1 char: S or G</li>
+<li><strong>command</strong> (<em>str</em>) – 3 char power command</li>
+<li><strong>data</strong> (<em>str</em>) – comma seperated list of Bytes</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict with ‘data’: comma separated list of Bytes</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.Output">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Output</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Output" title="Permalink to this definition">¶</a></dt>
-<dd><p>An output (e.g. a relay, light, …)</p>
-<dl class="attribute">
-<dt id="gateway.models.Output.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Output.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">OutputDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_shutter_down">
+<code class="descname">do_shutter_down</code><span class="sig-paren">(</span><em>id</em>, <em>position=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_shutter_down" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a shutter go down. The shutter stops automatically when the down or specified position is reached
+:param id: The id of the shutter.
+:param position: The desired end position</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_shutter_goto">
+<code class="descname">do_shutter_goto</code><span class="sig-paren">(</span><em>id</em>, <em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_shutter_goto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a shutter go up or down to the specified position.
+:param id: The id of the shutter.
+:param position: The desired end position</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.OutputToThermostatGroup">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">OutputToThermostatGroup</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.OutputToThermostatGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Outputs on a thermostat group are sometimes used for setting the pumpgroup in a certain state
-the index var is 0-4 of the output in setting this config</p>
-<dl class="attribute">
-<dt id="gateway.models.OutputToThermostatGroup.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.OutputToThermostatGroup.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">OutputToThermostatGroupDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_shutter_group_down">
+<code class="descname">do_shutter_group_down</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_shutter_group_down" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a shutter group go down. The shutters stop automatically when the down position is
+reached (after the predefined number of seconds).
+:param id: The id of the shutter group.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_shutter_group_stop">
+<code class="descname">do_shutter_group_stop</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_shutter_group_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a shutter group stop.
+:param id: The id of the shutter group.</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.PulseCounter">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">PulseCounter</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.PulseCounter" title="Permalink to this definition">¶</a></dt>
-<dd><p>A counter measuring pulses on e.g. an input</p>
-<dl class="attribute">
-<dt id="gateway.models.PulseCounter.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.PulseCounter.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">PulseCounterDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_shutter_group_up">
+<code class="descname">do_shutter_group_up</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_shutter_group_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a shutter group go up. The shutters stop automatically when the up position is
+reached (after the predefined number of seconds).
+:param id: The id of the shutter group.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_shutter_stop">
+<code class="descname">do_shutter_stop</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_shutter_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a shutter stop.
+:param id: The id of the shutter.</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.PumpToValve">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">PumpToValve</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.PumpToValve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Outputs on a thermostat group are sometimes used for setting the pumpgroup in a certain state
-the index var is 0-4 of the output in setting this config</p>
-<dl class="attribute">
-<dt id="gateway.models.PumpToValve.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.PumpToValve.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">PumpToValveDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_shutter_up">
+<code class="descname">do_shutter_up</code><span class="sig-paren">(</span><em>id</em>, <em>position=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_shutter_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a shutter go up. The shutter stops automatically when the up or specified position is reached
+:param id: The id of the shutter.
+:param position: The desired end position</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.do_url_action">
+<code class="descname">do_url_action</code><span class="sig-paren">(</span><em>url</em>, <em>method='GET'</em>, <em>headers=None</em>, <em>data=None</em>, <em>auth=None</em>, <em>timeout=10</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.do_url_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute an url action.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> (<em>str</em>) – The url to fetch.</li>
+<li><strong>method</strong> (<em>str | None</em>) – (optional) The http method (defaults to GET).</li>
+<li><strong>headers</strong> (<em>str | None</em>) – (optional) The http headers to send (format: json encoded dict)</li>
+<li><strong>data</strong> (<em>str | None</em>) – (optional) Bytes to send in the body of the request.</li>
+<li><strong>auth</strong> (<em>str | None</em>) – (optional) Json encoded tuple (username, password).</li>
+<li><strong>timeout</strong> (<em>int | None</em>) – (optional) Timeout in seconds for the http request (default = 10 sec).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘headers’: response headers, ‘data’: response body.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.Room">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Room</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Room" title="Permalink to this definition">¶</a></dt>
-<dd><p>A physical room in the building the gateway is installed</p>
-<dl class="attribute">
-<dt id="gateway.models.Room.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Room.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">RoomDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.flash_leds">
+<code class="descname">flash_leds</code><span class="sig-paren">(</span><em>type</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.flash_leds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flash the leds on the module for an output/input/sensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>int</em>) – The module type: output/dimmer (0), input (1), sensor/temperatur (2).</li>
+<li><strong>id</strong> (<em>int</em>) – The id of the output/input/sensor.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘status’: ‘OK’.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_airco_status">
+<code class="descname">get_airco_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_airco_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the mode of the airco attached to a all thermostats.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict with ASB0-ASB31.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.Schedule">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Schedule</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Schedule" title="Permalink to this definition">¶</a></dt>
-<dd><p>A schedule that can be used to automatically act in the future</p>
-<dl class="attribute">
-<dt id="gateway.models.Schedule.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Schedule.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ScheduleDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_can_led_configuration">
+<code class="descname">get_can_led_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_can_led_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific can_led_configuration defined by its id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>int</em>) – The id of the can_led_configuration</li>
+<li><strong>fields</strong> (<em>list</em>) – The field of the can_led_configuration to get. (None gets all fields)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘config’: can_led_configuration dict: contains ‘id’ (Id), ‘can_led_1_function’ (Enum), ‘can_led_1_id’ (Byte), ‘can_led_2_function’ (Enum), ‘can_led_2_id’ (Byte), ‘can_led_3_function’ (Enum), ‘can_led_3_id’ (Byte), ‘can_led_4_function’ (Enum), ‘can_led_4_id’ (Byte), ‘room’ (Byte)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_can_led_configurations">
+<code class="descname">get_can_led_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_can_led_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all can_led_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the can_led_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: list of can_led_configuration dict: contains ‘id’ (Id), ‘can_led_1_function’ (Enum), ‘can_led_1_id’ (Byte), ‘can_led_2_function’ (Enum), ‘can_led_2_id’ (Byte), ‘can_led_3_function’ (Enum), ‘can_led_3_id’ (Byte), ‘can_led_4_function’ (Enum), ‘can_led_4_id’ (Byte), ‘room’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.Sensor">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Sensor</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Sensor" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sensor measuring a physical quantity (e.g. temperature or humidity)</p>
-<dl class="attribute">
-<dt id="gateway.models.Sensor.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Sensor.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">SensorDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_cooling_configuration">
+<code class="descname">get_cooling_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_cooling_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific cooling_configuration defined by its id.
+:param id: The id of the cooling_configuration
+:param fields: The field of the cooling_configuration to get, None if all</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_cooling_configurations">
+<code class="descname">get_cooling_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_cooling_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all cooling_configurations.
+:param fields: The field of the cooling_configuration to get, None if all</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.Shutter">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">Shutter</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.Shutter" title="Permalink to this definition">¶</a></dt>
-<dd><p>A shutter (sometimes called screen) that is used for blocking sunlight from e.g. a window</p>
-<dl class="attribute">
-<dt id="gateway.models.Shutter.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.Shutter.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ShutterDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_cooling_pump_group_configuration">
+<code class="descname">get_cooling_pump_group_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_cooling_pump_group_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific cooling_pump_group_configuration defined by its id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>int</em>) – The id of the cooling_pump_group_configuration</li>
+<li><strong>fields</strong> (<em>list</em>) – The field of the cooling_pump_group_configuration to get. (None gets all fields)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘config’: cooling_pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_cooling_pump_group_configurations">
+<code class="descname">get_cooling_pump_group_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_cooling_pump_group_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all cooling_pump_group_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the cooling_pump_group_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: list of cooling_pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="gateway.models.User">
-<em class="property">class </em><code class="descclassname">gateway.models.</code><code class="descname">User</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.models.User" title="Permalink to this definition">¶</a></dt>
-<dd><p>A user that is known on the gateway and can perform certain actions</p>
-<dl class="attribute">
-<dt id="gateway.models.User.DoesNotExist">
-<code class="descname">DoesNotExist</code><a class="headerlink" href="#gateway.models.User.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDoesNotExist</span></code></p>
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_dimmer_configuration">
+<code class="descname">get_dimmer_configuration</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_dimmer_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the dimmer_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the dimmer_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: dimmer_configuration dict: contains ‘dim_memory’ (Byte), ‘dim_step’ (Byte), ‘dim_wait_cycle’ (Byte), ‘min_dim_level’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_energy_frequency">
+<code class="descname">get_energy_frequency</code><span class="sig-paren">(</span><em>module_id</em>, <em>input_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_energy_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the frequency components for a given module and optional input (no input means all)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>module_id</strong> (<em>int</em>) – The id of the power module</li>
+<li><strong>input_id</strong> (<em>int | None</em>) – The id of the input on the given power module</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dict with the input_id(s) as key, and as value another dict with for
+voltage and current the 20 frequency components</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_energy_time">
+<code class="descname">get_energy_time</code><span class="sig-paren">(</span><em>module_id</em>, <em>input_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_energy_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets 1 period of given module and optional input (no input means all).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>module_id</strong> (<em>int</em>) – The id of the power module.</li>
+<li><strong>input_id</strong> (<em>int</em><em> or </em><em>None</em>) – The id of the input on the given power module</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dict with the input_id(s) as key, and as value another dict with
+(up to 80) voltage and current samples.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_errors">
+<code class="descname">get_errors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of seconds since the last successul communication with the master and
+power modules (master_last_success, power_last_success) and the error list per module
+(input and output modules). The modules are identified by O1, O2, I1, I2, …</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘errors’: list of tuples (module, nr_errors), ‘master_last_success’: UNIX             timestamp of the last succesful master communication and ‘power_last_success’: UNIX             timestamp of the last successful power communication.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_features">
+<code class="descname">get_features</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all available features this Gateway supports. This allows to make flexible clients</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_full_backup">
+<code class="descname">get_full_backup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_full_backup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a backup (tar) of the master eeprom and the sqlite databases.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tar containing 4 files: master.eep, config.db, scheduled.db, power.db and
+eeprom_extensions.db as a string of bytes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_global_rtd10_configuration">
+<code class="descname">get_global_rtd10_configuration</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_global_rtd10_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the global_rtd10_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the global_rtd10_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: global_rtd10_configuration dict: contains ‘output_value_cooling_16’ (Byte), ‘output_value_cooling_16_5’ (Byte), ‘output_value_cooling_17’ (Byte), ‘output_value_cooling_17_5’ (Byte), ‘output_value_cooling_18’ (Byte), ‘output_value_cooling_18_5’ (Byte), ‘output_value_cooling_19’ (Byte), ‘output_value_cooling_19_5’ (Byte), ‘output_value_cooling_20’ (Byte), ‘output_value_cooling_20_5’ (Byte), ‘output_value_cooling_21’ (Byte), ‘output_value_cooling_21_5’ (Byte), ‘output_value_cooling_22’ (Byte), ‘output_value_cooling_22_5’ (Byte), ‘output_value_cooling_23’ (Byte), ‘output_value_cooling_23_5’ (Byte), ‘output_value_cooling_24’ (Byte), ‘output_value_heating_16’ (Byte), ‘output_value_heating_16_5’ (Byte), ‘output_value_heating_17’ (Byte), ‘output_value_heating_17_5’ (Byte), ‘output_value_heating_18’ (Byte), ‘output_value_heating_18_5’ (Byte), ‘output_value_heating_19’ (Byte), ‘output_value_heating_19_5’ (Byte), ‘output_value_heating_20’ (Byte), ‘output_value_heating_20_5’ (Byte), ‘output_value_heating_21’ (Byte), ‘output_value_heating_21_5’ (Byte), ‘output_value_heating_22’ (Byte), ‘output_value_heating_22_5’ (Byte), ‘output_value_heating_23’ (Byte), ‘output_value_heating_23_5’ (Byte), ‘output_value_heating_24’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_global_thermostat_configuration">
+<code class="descname">get_global_thermostat_configuration</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_global_thermostat_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the global_thermostat_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the global_thermostat_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: global_thermostat_configuration dict: contains ‘outside_sensor’ (Byte), ‘pump_delay’ (Byte), ‘switch_to_cooling_output_0’ (Byte), ‘switch_to_cooling_output_1’ (Byte), ‘switch_to_cooling_output_2’ (Byte), ‘switch_to_cooling_output_3’ (Byte), ‘switch_to_cooling_value_0’ (Byte), ‘switch_to_cooling_value_1’ (Byte), ‘switch_to_cooling_value_2’ (Byte), ‘switch_to_cooling_value_3’ (Byte), ‘switch_to_heating_output_0’ (Byte), ‘switch_to_heating_output_1’ (Byte), ‘switch_to_heating_output_2’ (Byte), ‘switch_to_heating_output_3’ (Byte), ‘switch_to_heating_value_0’ (Byte), ‘switch_to_heating_value_1’ (Byte), ‘switch_to_heating_value_2’ (Byte), ‘switch_to_heating_value_3’ (Byte), ‘threshold_temp’ (Temp)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_group_action_configuration">
+<code class="descname">get_group_action_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_group_action_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific group_action_configuration defined by its id.
+:param id: The id of the group_action_configuration
+:param fields: The field of the group_action_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_group_action_configurations">
+<code class="descname">get_group_action_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_group_action_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all group_action_configurations.
+:param fields: The field of the group_action_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_input_configuration">
+<code class="descname">get_input_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_input_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific input_configuration defined by its id.
+:param id: The id of the input_configuration
+:param fields: The field of the input_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_input_configurations">
+<code class="descname">get_input_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_input_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all input_configurations.
+:param fields: The field of the input_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_input_status">
+<code class="descname">get_input_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_input_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of the inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘status’: list of dictionaries with the following keys: id, status.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_last_inputs">
+<code class="descname">get_last_inputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_last_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the 5 last pressed inputs during the last 5 minutes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘inputs’: list of tuples (input, output).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_master_backup">
+<code class="descname">get_master_backup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_master_backup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a backup of the eeprom of the master.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">This function does not return a dict, unlike all other API functions: it             returns a string of bytes (size = 64kb).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bytearray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_module_log">
+<code class="descname">get_module_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_module_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the log messages from the module discovery mode. This returns the current log
+messages and clear the log messages.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_modules">
+<code class="descname">get_modules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all modules attached and registered with the master.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dict with:</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>‘outputs’ (list of module types: O,R,D),</li>
+<li>‘inputs’ (list of input module types: I,T,L,C)</li>
+<li>‘shutters’ (List of modules types: S).</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_modules_information">
+<code class="descname">get_modules_information</code><span class="sig-paren">(</span><em>address=None</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_modules_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets an overview of all modules and information
+:param address: Optional address filter
+:param fields: The field of the module information to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_output_configuration">
+<code class="descname">get_output_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_output_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific output_configuration defined by its id.
+:param id: The id of the output_configuration
+:param fields: The fields of the output_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_output_configurations">
+<code class="descname">get_output_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_output_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all output_configurations.
+:param fields: The field of the output_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_output_status">
+<code class="descname">get_output_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_output_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of the outputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘status’: list of dictionaries with the following keys: id, status, dimmer and ctimer.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_plugin_logs">
+<code class="descname">get_plugin_logs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_plugin_logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the logs for all plugins.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘logs’: dict with the names of the plugins as keys and the logs (String) as             value.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_plugins">
+<code class="descname">get_plugins</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the installed plugins.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘plugins’: dict with name, version and interfaces where name and version             are strings and interfaces is a list of tuples (interface, version) which are both strings.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_power_modules">
+<code class="descname">get_power_modules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_power_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information on the power modules. The times format is a comma seperated list of
+HH:MM formatted times times (index 0 = start Monday, index 1 = stop Monday,
+index 2 = start Tuesday, …).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘modules’: list of dictionaries with the following keys: ‘id’, ‘name’,             ‘address’, ‘input0’, ‘input1’, ‘input2’, ‘input3’, ‘input4’, ‘input5’, ‘input6’,             ‘input7’, ‘sensor0’, ‘sensor1’, ‘sensor2’, ‘sensor3’, ‘sensor4’, ‘sensor5’, ‘sensor6’,             ‘sensor7’, ‘times0’, ‘times1’, ‘times2’, ‘times3’, ‘times4’, ‘times5’, ‘times6’, ‘times7’.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_pulse_counter_configuration">
+<code class="descname">get_pulse_counter_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_pulse_counter_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific pulse_counter_configuration defined by its id.
+:param id: The id of the pulse_counter_configuration
+:param fields: The field of the pulse_counter_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_pulse_counter_configurations">
+<code class="descname">get_pulse_counter_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_pulse_counter_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pulse_counter_configurations.
+:param fields: The field of the pulse_counter_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_pulse_counter_status">
+<code class="descname">get_pulse_counter_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_pulse_counter_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pulse counter values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_pump_group_configuration">
+<code class="descname">get_pump_group_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_pump_group_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific pump_group_configuration defined by its id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>int</em>) – The id of the pump_group_configuration</li>
+<li><strong>fields</strong> (<em>list</em>) – The field of the pump_group_configuration to get. (None gets all fields)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘config’: pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_pump_group_configurations">
+<code class="descname">get_pump_group_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_pump_group_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pump_group_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the pump_group_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: list of pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_realtime_power">
+<code class="descname">get_realtime_power</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_realtime_power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the realtime power measurements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">module id as the keys: [voltage, frequency, current, power].</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_reset_dirty_flag">
+<code class="descname">get_reset_dirty_flag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_reset_dirty_flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the dirty flags, and immediately clears them</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_room_configuration">
+<code class="descname">get_room_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_room_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific room_configuration defined by its id.
+:param id: The id of the room_configuration
+:param fields: The fields of the room_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_room_configurations">
+<code class="descname">get_room_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_room_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all room_configuration.
+:param fields: The field of the room_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_rtd10_cooling_configuration">
+<code class="descname">get_rtd10_cooling_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_rtd10_cooling_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific rtd10_cooling_configuration defined by its id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>int</em>) – The id of the rtd10_cooling_configuration</li>
+<li><strong>fields</strong> (<em>list</em>) – The field of the rtd10_cooling_configuration to get. (None gets all fields)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘config’: rtd10_cooling_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_rtd10_cooling_configurations">
+<code class="descname">get_rtd10_cooling_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_rtd10_cooling_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all rtd10_cooling_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the rtd10_cooling_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: list of rtd10_cooling_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_rtd10_heating_configuration">
+<code class="descname">get_rtd10_heating_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_rtd10_heating_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific rtd10_heating_configuration defined by its id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>int</em>) – The id of the rtd10_heating_configuration</li>
+<li><strong>fields</strong> (<em>list</em>) – The field of the rtd10_heating_configuration to get. (None gets all fields)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘config’: rtd10_heating_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_rtd10_heating_configurations">
+<code class="descname">get_rtd10_heating_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_rtd10_heating_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all rtd10_heating_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the rtd10_heating_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: list of rtd10_heating_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_scheduled_action_configuration">
+<code class="descname">get_scheduled_action_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_scheduled_action_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific scheduled_action_configuration defined by its id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>int</em>) – The id of the scheduled_action_configuration</li>
+<li><strong>fields</strong> (<em>list</em>) – The field of the scheduled_action_configuration to get. (None gets all fields)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘config’: scheduled_action_configuration dict: contains ‘id’ (Id), ‘action’ (Actions[1]), ‘day’ (Byte), ‘hour’ (Byte), ‘minute’ (Byte)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_scheduled_action_configurations">
+<code class="descname">get_scheduled_action_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_scheduled_action_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all scheduled_action_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the scheduled_action_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: list of scheduled_action_configuration dict: contains ‘id’ (Id), ‘action’ (Actions[1]), ‘day’ (Byte), ‘hour’ (Byte), ‘minute’ (Byte)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_sensor_brightness_status">
+<code class="descname">get_sensor_brightness_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_sensor_brightness_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current brightness of all sensors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘status’: List of 32 bytes, 1 for each sensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_sensor_configuration">
+<code class="descname">get_sensor_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_sensor_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific sensor_configuration defined by its id.
+:param id: The id of the sensor_configuration
+:param fields: The field of the sensor_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_sensor_configurations">
+<code class="descname">get_sensor_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_sensor_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all sensor_configurations.
+:param fields: The field of the sensor_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_sensor_humidity_status">
+<code class="descname">get_sensor_humidity_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_sensor_humidity_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current humidity of all sensors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘status’: List of 32 bytes, 1 for each sensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_sensor_temperature_status">
+<code class="descname">get_sensor_temperature_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_sensor_temperature_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current temperature of all sensors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘status’: list of 32 temperatures, 1 for each sensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_settings">
+<code class="descname">get_settings</code><span class="sig-paren">(</span><em>settings</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a given setting</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_shutter_configuration">
+<code class="descname">get_shutter_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_shutter_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific shutter_configuration defined by its id.
+:param id: The id of the shutter_configuration
+:param fields: The fields of the shutter_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_shutter_configurations">
+<code class="descname">get_shutter_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_shutter_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all shutter_configurations.
+:param fields: The fields of the shutter_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_shutter_group_configuration">
+<code class="descname">get_shutter_group_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_shutter_group_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific shutter_group_configuration defined by its id.
+:param id: The id of the shutter_group_configuration
+:param fields: The field of the shutter_group_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_shutter_group_configurations">
+<code class="descname">get_shutter_group_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_shutter_group_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all shutter_group_configurations.
+:param fields: The field of the shutter_group_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_shutter_status">
+<code class="descname">get_shutter_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_shutter_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of the shutters.
+:returns: ‘status’: list of dictionaries with the following keys: id, position.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_startup_action_configuration">
+<code class="descname">get_startup_action_configuration</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_startup_action_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the startup_action_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fields</strong> (<em>list</em>) – The field of the startup_action_configuration to get. (None gets all fields)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘config’: startup_action_configuration dict: contains ‘actions’ (Actions[100])</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_status">
+<code class="descname">get_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of the master.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘time’: hour and minutes (HH:MM), ‘date’: day, month, year (DD:MM:YYYY),             ‘mode’: Integer, ‘version’: a.b.c and ‘hw_version’: hardware version (Integer).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_thermostat_configuration">
+<code class="descname">get_thermostat_configuration</code><span class="sig-paren">(</span><em>id</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_thermostat_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific thermostat_configuration defined by its id.
+:param id: The id of the thermostat_configuration
+:param fields: The field of the thermostat_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_thermostat_configurations">
+<code class="descname">get_thermostat_configurations</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_thermostat_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all thermostat_configurations.
+:param fields: The field of the thermostat_configuration to get, None if all</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_thermostat_status">
+<code class="descname">get_thermostat_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_thermostat_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of the thermostats.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">global status information about the thermostats: ‘thermostats_on’,             ‘automatic’ and ‘setpoint’ and ‘status’: a list with status information for all             thermostats, each element in the list is a dict with the following keys:             ‘id’, ‘act’, ‘csetp’, ‘output0’, ‘output1’, ‘outside’, ‘mode’.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_timezone">
+<code class="descname">get_timezone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the timezone for the gateway.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘timezone’: the timezone in ‘Continent/City’ format (String).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_total_energy">
+<code class="descname">get_total_energy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_total_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the total energy (Wh) consumed by the power modules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">modules id as key: [day, night].</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_update_output">
+<code class="descname">get_update_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_update_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output of the last update.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘output’: String with the output from the update script.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_usernames">
+<code class="descname">get_usernames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_usernames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the names of the users on the gateway. Only possible in authorized mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘usernames’: list of usernames (String).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.get_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the version of the openmotics software.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘version’: String (a.b.c).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.health_check">
+<code class="descname">health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requests the state of the various services and checks the returned value for the global state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.in_power_address_mode">
+<code class="descname">in_power_address_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.in_power_address_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the power modules are in address mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘address_mode’: Boolean</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.index">
+<code class="descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index page of the web service (Gateway GUI)
+:returns: Contents of index.html
+:rtype: str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.indicate">
+<code class="descname">indicate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.indicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blinks the Status led on the Gateway to indicate the module</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.install_plugin">
+<code class="descname">install_plugin</code><span class="sig-paren">(</span><em>md5</em>, <em>package_data</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.install_plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install a new plugin. The package_data should include a __init__.py file and
+will be installed in /opt/openmotics/python/plugins/&lt;name&gt;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>md5</strong> (<em>String</em>) – md5 sum of the package_data.</li>
+<li><strong>package_data</strong> (<em>multipart/form-data encoded byte string.</em>) – a tgz file containing the content of the plugin package.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.login">
+<code class="descname">login</code><span class="sig-paren">(</span><em>username</em>, <em>password</em>, <em>accept_terms=None</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Login to the web service, returns a token if successful, returns HTTP status code 401 otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str</em>) – Name of the user.</li>
+<li><strong>password</strong> (<em>str</em>) – Password of the user.</li>
+<li><strong>accept_terms</strong> (<em>bool | None</em>) – True if the terms are accepted</li>
+<li><strong>timeout</strong> (<em>int</em>) – Optional session timeout. 30d &gt;= x &gt;= 1h</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Authentication token</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.logout">
+<code class="descname">logout</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logout from the web service.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘status’: ‘OK’</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.master_clear_error_list">
+<code class="descname">master_clear_error_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.master_clear_error_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the number of errors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.master_restore">
+<code class="descname">master_restore</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.master_restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore a backup of the eeprom of the master.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>multipart/form-data encoded bytes</em><em> (</em><em>size = 64 kb</em><em>)</em><em></em>) – The eeprom backup to restore.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘output’: array with the addresses that were written.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.module_discover_start">
+<code class="descname">module_discover_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.module_discover_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the module discover mode on the master.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.module_discover_status">
+<code class="descname">module_discover_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.module_discover_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the status of the module discover mode on the master.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.module_discover_stop">
+<code class="descname">module_discover_stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.module_discover_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the module discover mode on the master.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.open_maintenance">
+<code class="descname">open_maintenance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.open_maintenance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open maintenance mode, return the port of the maintenance socket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘port’: Port on which the maintenance ssl socket is listening (Integer between 6000 and 7000).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.remove_plugin">
+<code class="descname">remove_plugin</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.remove_plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a plugin. This removes the package data and configuration data of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – Name of the plugin to remove.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.remove_user">
+<code class="descname">remove_user</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.remove_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a user. Only possible in authorized mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str</em>) – Name of the user to remove.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.reset_master">
+<code class="descname">reset_master</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.reset_master" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a cold reset on the master.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘status’: ‘OK’.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.restore_full_backup">
+<code class="descname">restore_full_backup</code><span class="sig-paren">(</span><em>backup_data</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.restore_full_backup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore a full backup containing the master eeprom and the sqlite databases.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>backup_data</strong> (<em>multipart/form-data encoded bytes.</em>) – The full backup to restore: tar containing 4 files: master.eep, config.db,             scheduled.db, power.db and eeprom_extensions.db as a string of bytes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict with ‘output’ key.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_airco_status">
+<code class="descname">set_airco_status</code><span class="sig-paren">(</span><em>thermostat_id</em>, <em>airco_on</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_airco_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the mode of the airco attached to a given thermostat.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>thermostat_id</strong> (<em>int</em>) – The thermostat id.</li>
+<li><strong>airco_on</strong> (<em>bool</em>) – Turns the airco on if True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict with ‘status’</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_all_lights_floor_off">
+<code class="descname">set_all_lights_floor_off</code><span class="sig-paren">(</span><em>floor</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_all_lights_floor_off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn all lights on a given floor off.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_all_lights_floor_on">
+<code class="descname">set_all_lights_floor_on</code><span class="sig-paren">(</span><em>floor</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_all_lights_floor_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn all lights on a given floor on.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_all_lights_off">
+<code class="descname">set_all_lights_off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_all_lights_off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn all lights off.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_can_led_configuration">
+<code class="descname">set_can_led_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_can_led_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one can_led_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The can_led_configuration to set: can_led_configuration dict: contains ‘id’ (Id), ‘can_led_1_function’ (Enum), ‘can_led_1_id’ (Byte), ‘can_led_2_function’ (Enum), ‘can_led_2_id’ (Byte), ‘can_led_3_function’ (Enum), ‘can_led_3_id’ (Byte), ‘can_led_4_function’ (Enum), ‘can_led_4_id’ (Byte), ‘room’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_can_led_configurations">
+<code class="descname">set_can_led_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_can_led_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple can_led_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>list</em>) – The list of can_led_configurations to set: list of can_led_configuration dict: contains ‘id’ (Id), ‘can_led_1_function’ (Enum), ‘can_led_1_id’ (Byte), ‘can_led_2_function’ (Enum), ‘can_led_2_id’ (Byte), ‘can_led_3_function’ (Enum), ‘can_led_3_id’ (Byte), ‘can_led_4_function’ (Enum), ‘can_led_4_id’ (Byte), ‘room’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_cooling_configuration">
+<code class="descname">set_cooling_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_cooling_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one cooling_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_cooling_configurations">
+<code class="descname">set_cooling_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_cooling_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple cooling_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_cooling_pump_group_configuration">
+<code class="descname">set_cooling_pump_group_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_cooling_pump_group_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one cooling_pump_group_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The cooling_pump_group_configuration to set: cooling_pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_cooling_pump_group_configurations">
+<code class="descname">set_cooling_pump_group_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_cooling_pump_group_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple cooling_pump_group_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>list</em>) – The list of cooling_pump_group_configurations to set: list of cooling_pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_current_setpoint">
+<code class="descname">set_current_setpoint</code><span class="sig-paren">(</span><em>thermostat</em>, <em>temperature</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_current_setpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current setpoint of a thermostat.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>thermostat</strong> (<em>int</em>) – The id of the thermostat to set</li>
+<li><strong>temperature</strong> (<em>float</em>) – The temperature to set in degrees Celcius</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘status’: ‘OK’.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_dimmer_configuration">
+<code class="descname">set_dimmer_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_dimmer_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the dimmer_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The dimmer_configuration to set: dimmer_configuration dict: contains ‘dim_memory’ (Byte), ‘dim_step’ (Byte), ‘dim_wait_cycle’ (Byte), ‘min_dim_level’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_global_rtd10_configuration">
+<code class="descname">set_global_rtd10_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_global_rtd10_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the global_rtd10_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The global_rtd10_configuration to set: global_rtd10_configuration dict: contains ‘output_value_cooling_16’ (Byte), ‘output_value_cooling_16_5’ (Byte), ‘output_value_cooling_17’ (Byte), ‘output_value_cooling_17_5’ (Byte), ‘output_value_cooling_18’ (Byte), ‘output_value_cooling_18_5’ (Byte), ‘output_value_cooling_19’ (Byte), ‘output_value_cooling_19_5’ (Byte), ‘output_value_cooling_20’ (Byte), ‘output_value_cooling_20_5’ (Byte), ‘output_value_cooling_21’ (Byte), ‘output_value_cooling_21_5’ (Byte), ‘output_value_cooling_22’ (Byte), ‘output_value_cooling_22_5’ (Byte), ‘output_value_cooling_23’ (Byte), ‘output_value_cooling_23_5’ (Byte), ‘output_value_cooling_24’ (Byte), ‘output_value_heating_16’ (Byte), ‘output_value_heating_16_5’ (Byte), ‘output_value_heating_17’ (Byte), ‘output_value_heating_17_5’ (Byte), ‘output_value_heating_18’ (Byte), ‘output_value_heating_18_5’ (Byte), ‘output_value_heating_19’ (Byte), ‘output_value_heating_19_5’ (Byte), ‘output_value_heating_20’ (Byte), ‘output_value_heating_20_5’ (Byte), ‘output_value_heating_21’ (Byte), ‘output_value_heating_21_5’ (Byte), ‘output_value_heating_22’ (Byte), ‘output_value_heating_22_5’ (Byte), ‘output_value_heating_23’ (Byte), ‘output_value_heating_23_5’ (Byte), ‘output_value_heating_24’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_global_thermostat_configuration">
+<code class="descname">set_global_thermostat_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_global_thermostat_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the global_thermostat_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The global_thermostat_configuration to set: global_thermostat_configuration dict: contains ‘outside_sensor’ (Byte), ‘pump_delay’ (Byte), ‘switch_to_cooling_output_0’ (Byte), ‘switch_to_cooling_output_1’ (Byte), ‘switch_to_cooling_output_2’ (Byte), ‘switch_to_cooling_output_3’ (Byte), ‘switch_to_cooling_value_0’ (Byte), ‘switch_to_cooling_value_1’ (Byte), ‘switch_to_cooling_value_2’ (Byte), ‘switch_to_cooling_value_3’ (Byte), ‘switch_to_heating_output_0’ (Byte), ‘switch_to_heating_output_1’ (Byte), ‘switch_to_heating_output_2’ (Byte), ‘switch_to_heating_output_3’ (Byte), ‘switch_to_heating_value_0’ (Byte), ‘switch_to_heating_value_1’ (Byte), ‘switch_to_heating_value_2’ (Byte), ‘switch_to_heating_value_3’ (Byte), ‘threshold_temp’ (Temp)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_group_action_configuration">
+<code class="descname">set_group_action_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_group_action_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one group_action_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_group_action_configurations">
+<code class="descname">set_group_action_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_group_action_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple group_action_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_input_configuration">
+<code class="descname">set_input_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_input_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one input_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_input_configurations">
+<code class="descname">set_input_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_input_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple input_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_master_status_leds">
+<code class="descname">set_master_status_leds</code><span class="sig-paren">(</span><em>status</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_master_status_leds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the status of the leds on the master.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>status</strong> (<em>bool</em>) – whether the leds should be on (true) or off (false).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_metrics_collector">
+<code class="descname">set_metrics_collector</code><span class="sig-paren">(</span><em>metrics_collector</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_metrics_collector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the metrics collector</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_metrics_controller">
+<code class="descname">set_metrics_controller</code><span class="sig-paren">(</span><em>metrics_controller</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_metrics_controller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the metrics controller</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_output">
+<code class="descname">set_output</code><span class="sig-paren">(</span><em>id</em>, <em>is_on</em>, <em>dimmer=None</em>, <em>timer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the status, dimmer and timer of an output.
+:param id: The id of the output to set
+:param is_on: Whether the output should be on
+:param dimmer: The dimmer value to set, None if unchanged
+:param timer: The timer value to set, None if unchanged</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_output_configuration">
+<code class="descname">set_output_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_output_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one output_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_output_configurations">
+<code class="descname">set_output_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_output_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple output_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_per_thermostat_mode">
+<code class="descname">set_per_thermostat_mode</code><span class="sig-paren">(</span><em>thermostat_id</em>, <em>automatic</em>, <em>setpoint</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_per_thermostat_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the thermostat mode of a given thermostat. Thermostats can be set to automatic or
+manual, in case of manual a setpoint (0 to 5) can be provided.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>thermostat_id</strong> (<em>int</em>) – The thermostat id</li>
+<li><strong>automatic</strong> (<em>bool</em>) – Automatic mode (True) or Manual mode (False).</li>
+<li><strong>setpoint</strong> (<em>int</em>) – The current setpoint.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_plugin_controller">
+<code class="descname">set_plugin_controller</code><span class="sig-paren">(</span><em>plugin_controller</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_plugin_controller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the plugin controller.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_power_modules">
+<code class="descname">set_power_modules</code><span class="sig-paren">(</span><em>modules</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_power_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set information for the power modules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>modules</strong> (<em>str</em>) – json encoded list of dicts with keys: ‘id’, ‘name’, ‘input0’, ‘input1’,             ‘input2’, ‘input3’, ‘input4’, ‘input5’, ‘input6’, ‘input7’, ‘sensor0’, ‘sensor1’,             ‘sensor2’, ‘sensor3’, ‘sensor4’, ‘sensor5’, ‘sensor6’, ‘sensor7’, ‘times0’, ‘times1’,             ‘times2’, ‘times3’, ‘times4’, ‘times5’, ‘times6’, ‘times7’.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_power_voltage">
+<code class="descname">set_power_voltage</code><span class="sig-paren">(</span><em>module_id</em>, <em>voltage</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_power_voltage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the voltage for a given module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>module_id</strong> (<em>int</em>) – The id of the power module.</li>
+<li><strong>voltage</strong> (<em>float</em>) – The voltage to set for the power module.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_pulse_counter_amount">
+<code class="descname">set_pulse_counter_amount</code><span class="sig-paren">(</span><em>amount</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_pulse_counter_amount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the number of pulse counters. The minimum is 24, these are the pulse counters
+that can be linked to an input. An amount greater than 24 will result in virtual
+pulse counter that can be set through the API.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_pulse_counter_configuration">
+<code class="descname">set_pulse_counter_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_pulse_counter_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one pulse_counter_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_pulse_counter_configurations">
+<code class="descname">set_pulse_counter_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_pulse_counter_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple pulse_counter_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_pulse_counter_status">
+<code class="descname">set_pulse_counter_status</code><span class="sig-paren">(</span><em>pulse_counter_id</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_pulse_counter_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a pulse counter to a value. This can only be done for virtual pulse counters,
+with a pulse_counter_id &gt;= 24.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_pump_group_configuration">
+<code class="descname">set_pump_group_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_pump_group_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one pump_group_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The pump_group_configuration to set: pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_pump_group_configurations">
+<code class="descname">set_pump_group_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_pump_group_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple pump_group_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>list</em>) – The list of pump_group_configurations to set: list of pump_group_configuration dict: contains ‘id’ (Id), ‘outputs’ (CSV[32]), ‘room’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_room_configuration">
+<code class="descname">set_room_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_room_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one room_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_room_configurations">
+<code class="descname">set_room_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_room_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple room_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_rtd10_cooling_configuration">
+<code class="descname">set_rtd10_cooling_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_rtd10_cooling_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one rtd10_cooling_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The rtd10_cooling_configuration to set: rtd10_cooling_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_rtd10_cooling_configurations">
+<code class="descname">set_rtd10_cooling_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_rtd10_cooling_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple rtd10_cooling_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>list</em>) – The list of rtd10_cooling_configurations to set: list of rtd10_cooling_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_rtd10_heating_configuration">
+<code class="descname">set_rtd10_heating_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_rtd10_heating_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one rtd10_heating_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The rtd10_heating_configuration to set: rtd10_heating_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_rtd10_heating_configurations">
+<code class="descname">set_rtd10_heating_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_rtd10_heating_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple rtd10_heating_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>list</em>) – The list of rtd10_heating_configurations to set: list of rtd10_heating_configuration dict: contains ‘id’ (Id), ‘mode_output’ (Byte), ‘mode_value’ (Byte), ‘on_off_output’ (Byte), ‘poke_angle_output’ (Byte), ‘poke_angle_value’ (Byte), ‘room’ (Byte), ‘temp_setpoint_output’ (Byte), ‘ventilation_speed_output’ (Byte), ‘ventilation_speed_value’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_scheduled_action_configuration">
+<code class="descname">set_scheduled_action_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_scheduled_action_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one scheduled_action_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The scheduled_action_configuration to set: scheduled_action_configuration dict: contains ‘id’ (Id), ‘action’ (Actions[1]), ‘day’ (Byte), ‘hour’ (Byte), ‘minute’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_scheduled_action_configurations">
+<code class="descname">set_scheduled_action_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_scheduled_action_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple scheduled_action_configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>list</em>) – The list of scheduled_action_configurations to set: list of scheduled_action_configuration dict: contains ‘id’ (Id), ‘action’ (Actions[1]), ‘day’ (Byte), ‘hour’ (Byte), ‘minute’ (Byte)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_sensor_configuration">
+<code class="descname">set_sensor_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_sensor_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one sensor_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_sensor_configurations">
+<code class="descname">set_sensor_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_sensor_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple sensor_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_setting">
+<code class="descname">set_setting</code><span class="sig-paren">(</span><em>setting</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_setting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures a setting</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_shutter_configuration">
+<code class="descname">set_shutter_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_shutter_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one shutter_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_shutter_configurations">
+<code class="descname">set_shutter_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_shutter_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple shutter_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_shutter_group_configuration">
+<code class="descname">set_shutter_group_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_shutter_group_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one shutter_group_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_shutter_group_configurations">
+<code class="descname">set_shutter_group_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_shutter_group_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple shutter_group_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_startup_action_configuration">
+<code class="descname">set_startup_action_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_startup_action_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the startup_action_configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) – The startup_action_configuration to set: startup_action_configuration dict: contains ‘actions’ (Actions[100])</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_thermostat_configuration">
+<code class="descname">set_thermostat_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_thermostat_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set one thermostat_configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_thermostat_configurations">
+<code class="descname">set_thermostat_configurations</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_thermostat_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple thermostat_configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_thermostat_mode">
+<code class="descname">set_thermostat_mode</code><span class="sig-paren">(</span><em>thermostat_on</em>, <em>automatic=None</em>, <em>setpoint=None</em>, <em>cooling_mode=False</em>, <em>cooling_on=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_thermostat_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the global mode of the thermostats. Thermostats can be on or off (thermostat_on),
+can be in cooling or heating (cooling_mode), cooling can be turned on or off (cooling_on).
+The automatic and setpoint parameters are here for backwards compatibility and will be
+applied to all thermostats. To control the automatic and setpoint parameters per thermostat
+use the v0_set_per_thermostat_mode call instead.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>thermostat_on</strong> (<em>bool</em>) – Whether the thermostats are on</li>
+<li><strong>automatic</strong> (<em>bool</em><em> or </em><em>None</em>) – Automatic mode (True) or Manual mode (False).  This parameter is here for
+backwards compatibility, use v0_set_per_thermostat_mode instead.</li>
+<li><strong>setpoint</strong> (<em>int</em><em> or </em><em>None</em>) – The current setpoint.  This parameter is here for backwards compatibility,
+use v0_set_per_thermostat_mode instead.</li>
+<li><strong>cooling_mode</strong> (<em>bool</em><em> or </em><em>None</em>) – Cooling mode (True) of Heating mode (False)</li>
+<li><strong>cooling_on</strong> – Turns cooling ON when set to true.</li>
+<li><strong>cooling_on</strong> – bool or None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">‘status’: ‘OK’.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_timezone">
+<code class="descname">set_timezone</code><span class="sig-paren">(</span><em>timezone</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the timezone for the gateway.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timezone</strong> (<em>str</em>) – in format ‘Continent/City’.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.set_virtual_sensor">
+<code class="descname">set_virtual_sensor</code><span class="sig-paren">(</span><em>sensor_id</em>, <em>temperature</em>, <em>humidity</em>, <em>brightness</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.set_virtual_sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the temperature, humidity and brightness value of a virtual sensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sensor_id</strong> (<em>int</em>) – The id of the sensor.</li>
+<li><strong>temperature</strong> (<em>float</em>) – The temperature to set in degrees Celcius</li>
+<li><strong>humidity</strong> (<em>float</em>) – The humidity to set in percentage</li>
+<li><strong>brightness</strong> (<em>int</em>) – The brightness to set in percentage</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict with ‘status’.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.shutter_report_lost_position">
+<code class="descname">shutter_report_lost_position</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.shutter_report_lost_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reports a shutter has lost it’s position
+:param id: The id of the shutter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.shutter_report_position">
+<code class="descname">shutter_report_position</code><span class="sig-paren">(</span><em>id</em>, <em>position</em>, <em>direction=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.shutter_report_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reports the actual position of a shutter
+:param id: The id of the shutter.
+:param position: The actual position
+:param direction: The direction</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.start_plugin">
+<code class="descname">start_plugin</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.start_plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a plugin</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.start_power_address_mode">
+<code class="descname">start_power_address_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.start_power_address_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the address mode on the power modules.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.stop_plugin">
+<code class="descname">stop_plugin</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.stop_plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops a plugin</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.stop_power_address_mode">
+<code class="descname">stop_power_address_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.stop_power_address_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the address mode on the power modules.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>version</em>, <em>md5</em>, <em>update_data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an update.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>version</strong> (<em>str</em>) – the new version number.</li>
+<li><strong>md5</strong> (<em>str</em>) – the md5 sum of update_data.</li>
+<li><strong>update_data</strong> (<em>multipart/form-data encoded byte string.</em>) – a tgz file containing the update script (update.sh) and data.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.update_master_firmware">
+<code class="descname">update_master_firmware</code><span class="sig-paren">(</span><em>md5</em>, <em>firmware_data</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.update_master_firmware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a master firmware update.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gateway.webservice.WebInterface.update_slave_firmware">
+<code class="descname">update_slave_firmware</code><span class="sig-paren">(</span><em>type</em>, <em>md5</em>, <em>firmware_data</em><span class="sig-paren">)</span><a class="headerlink" href="#gateway.webservice.WebInterface.update_slave_firmware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a slave firmware update.</p>
 </dd></dl>
 
 </dd></dl>

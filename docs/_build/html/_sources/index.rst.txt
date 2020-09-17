@@ -1,7 +1,7 @@
 Welcome to gateway's documentation!
 ===================================
 
-.. automodule:: gateway.models
+.. autoclass:: gateway.webservice.WebInterface
     :members:
 
 .. toctree::
