@@ -77,12 +77,14 @@ class BaseModel(Model):
 
 
 class Floor(BaseModel):
+    """ A physical floor in the building the gateway is installed """
     id = AutoField()
     number = IntegerField(unique=True)
     name = CharField(null=True)
 
 
 class Room(BaseModel):
+    """ A physical room in the building the gateway is installed """
     id = AutoField()
     number = IntegerField(unique=True)
     name = CharField(null=True)
@@ -96,12 +98,14 @@ class Feature(BaseModel):
 
 
 class Output(BaseModel):
+    """ An output (e.g. a relay, light, ...) """
     id = AutoField()
     number = IntegerField(unique=True)
     room = ForeignKeyField(Room, null=True, on_delete='SET NULL', backref='outputs')
 
 
 class Input(BaseModel):
+    """ An input (e.g. a relay) """
     id = AutoField()
     number = IntegerField(unique=True)
     event_enabled = BooleanField(default=False)
@@ -109,6 +113,7 @@ class Input(BaseModel):
 
 
 class Shutter(BaseModel):
+    """ A shutter (sometimes called screen) that is used for blocking sunlight from e.g. a window """
     id = AutoField()
     number = IntegerField(unique=True)
     room = ForeignKeyField(Room, null=True, on_delete='SET NULL', backref='shutters')
@@ -121,12 +126,14 @@ class ShutterGroup(BaseModel):
 
 
 class Sensor(BaseModel):
+    """ A sensor measuring a physical quantity (e.g. temperature or humidity) """
     id = AutoField()
     number = IntegerField(unique=True)
     room = ForeignKeyField(Room, null=True, on_delete='SET NULL', backref='sensors')
 
 
 class PulseCounter(BaseModel):
+    """ A counter measuring pulses on e.g. an input """
     id = AutoField()
     number = IntegerField(unique=True)
     name = CharField()
@@ -141,6 +148,7 @@ class GroupAction(BaseModel):
 
 
 class Module(BaseModel):
+    """ A hardware slave module attached to the gateway """
     id = AutoField()
     source = CharField()
     address = CharField()
@@ -159,6 +167,7 @@ class DataMigration(BaseModel):
 
 
 class Schedule(BaseModel):
+    """ A schedule that can be used to automatically act in the future """
     id = AutoField()
     name = CharField()
     start = FloatField()
@@ -171,6 +180,7 @@ class Schedule(BaseModel):
 
 
 class User(BaseModel):
+    """ A user that is known on the gateway and can perform certain actions """
     id = AutoField()
     username = CharField(unique=True)
     password = CharField()
