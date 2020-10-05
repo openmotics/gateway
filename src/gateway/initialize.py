@@ -34,6 +34,7 @@ import constants
 from bus.om_bus_client import MessageClient
 from gateway.hal.master_controller_classic import MasterClassicController
 from gateway.hal.master_controller_core import MasterCoreController
+from gateway.migrations import MIGRATE_DIR
 from gateway.models import Database, Feature
 from ioc import INJECTED, Inject, Injectable
 from master.classic.maintenance import MaintenanceClassicCommunicator
@@ -92,7 +93,7 @@ def apply_migrations():
     logger.info('Applying migrations')
     # Run all unapplied migrations
     db = Database.get_db()
-    router = Router(db, migrate_dir='/opt/openmotics/python/gateway/migrations/orm')
+    router = Router(db, migrate_dir=MIGRATE_DIR)
     router.run()
 
 
