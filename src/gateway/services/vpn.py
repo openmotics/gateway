@@ -20,9 +20,6 @@ thermostats to the cloud, to keep the status information in the cloud in sync.
 
 from __future__ import absolute_import
 
-from platform_utils import System
-System.import_libs()
-
 import glob
 import logging
 import os
@@ -40,10 +37,9 @@ from six.moves.configparser import ConfigParser
 import constants
 from bus.om_bus_client import MessageClient
 from bus.om_bus_events import OMBusEvents
-from gateway.initialize import initialize
 from gateway.models import Config
 from ioc import INJECTED, Inject
-
+from platform_utils import System
 
 if False:  # MYPY
     from typing import Any, Deque, Dict, Optional
@@ -52,18 +48,7 @@ REBOOT_TIMEOUT = 900
 CHECK_CONNECTIVITY_TIMEOUT = 60
 DEFAULT_SLEEP_TIME = 30
 
-logger = logging.getLogger("openmotics")
-
-
-def setup_logger():
-    """ Setup the OpenMotics logger. """
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
+logger = logging.getLogger('openmotics')
 
 
 def reboot_gateway():
@@ -591,12 +576,3 @@ class VPNService(object):
             except Exception as ex:
                 logger.error("Error during vpn check loop: {0}".format(ex))
                 time.sleep(1)
-
-
-if __name__ == '__main__':
-    setup_logger()
-    initialize(message_client_name='vpn_service')
-
-    logger.info("Starting VPN service")
-    vpn_service = VPNService()
-    vpn_service.start()
