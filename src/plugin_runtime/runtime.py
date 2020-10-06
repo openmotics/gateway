@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import logging
 import os
 import sys
@@ -6,18 +7,15 @@ import time
 import traceback
 from threading import Thread
 
-sys.path.insert(0, '/opt/openmotics/python')
-
-from platform_utils import System
-System.import_libs()
-
 import six
-from toolbox import PluginIPCReader, PluginIPCWriter, Toolbox
+
 from gateway.events import GatewayEvent
 from plugin_runtime import base
-from plugin_runtime.utils import get_plugin_class, check_plugin, get_special_methods
 from plugin_runtime.interfaces import has_interface
+from plugin_runtime.utils import check_plugin, get_plugin_class, \
+    get_special_methods
 from plugin_runtime.web import WebInterfaceDispatcher
+from toolbox import PluginIPCReader, PluginIPCWriter, Toolbox
 
 logger = logging.getLogger('openmotics')
 
@@ -346,11 +344,8 @@ class PluginRuntime(object):
             return {'success': False, 'exception': str(exception), 'stacktrace': traceback.format_exc()}
 
 
-if __name__ == '__main__':
-    if len(sys.argv) < 3 or sys.argv[1] != 'start':
-        sys.stderr.write('Usage: python {0} start <path>\n'.format(sys.argv[0]))
-        sys.stderr.flush()
-        sys.exit(1)
+def start_runtime(plugin_path):
+    # type: (str) -> None
 
     def watch_parent():
         parent = os.getppid()
@@ -368,7 +363,7 @@ if __name__ == '__main__':
 
     # Start the runtime
     try:
-        runtime = PluginRuntime(path=sys.argv[2])
+        runtime = PluginRuntime(path=plugin_path)
         runtime.process_stdin()
     except BaseException as ex:
         writer = PluginIPCWriter(os.fdopen(sys.stdout.fileno(), 'wb', 0))

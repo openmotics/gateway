@@ -99,7 +99,7 @@ class PluginRunner(object):
         if python_executable is None or len(python_executable) == 0:
             python_executable = '/usr/bin/python'
 
-        self._proc = subprocess.Popen([python_executable, "runtime.py", "start", self.plugin_path],
+        self._proc = subprocess.Popen([python_executable, 'run.py', 'start', self.plugin_path],
                                       stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=None,
                                       cwd=self.runtime_path)
         assert self._proc.stdout, 'Plugin stdout not available'
