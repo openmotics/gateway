@@ -17,16 +17,11 @@ The main module for the OpenMotics
 """
 from __future__ import absolute_import
 
-from platform_utils import System
-System.import_libs()
-
 import logging
 import time
 from signal import SIGTERM, signal
 
 from bus.om_bus_client import MessageClient
-from bus.om_bus_service import MessageService
-from gateway.initialize import initialize
 from gateway.migrations.rooms import RoomsMigrator
 from gateway.migrations.features_data_migrations import FeatureMigrator
 from gateway.migrations.inputs import InputMigrator
@@ -61,19 +56,7 @@ if False:  # MYPY
     from cloud.events import EventSender
     from serial_utils import RS485
 
-logger = logging.getLogger("openmotics")
-
-
-def setup_logger():
-    """ Setup the OpenMotics logger. """
-
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
+logger = logging.getLogger('openmotics')
 
 
 class OpenmoticsService(object):
@@ -240,16 +223,3 @@ class OpenmoticsService(object):
         logger.info('Starting OM core service... Done')
         while not signal_request['stop']:
             time.sleep(1)
-
-
-if __name__ == "__main__":
-    setup_logger()
-    initialize(message_client_name='openmotics_service')
-
-    logger.info("Starting OpenMotics service")
-    # TODO: move message service to separate process
-    message_service = MessageService()
-    message_service.start()
-
-    OpenmoticsService.fix_dependencies()
-    OpenmoticsService.start()
