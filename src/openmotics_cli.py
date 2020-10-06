@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright (C) 2020 OpenMotics BV
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,45 +16,59 @@
 from __future__ import absolute_import
 
 import argparse
+import functools
 import logging
 import os
 import sys
+
 import constants
-import gateway
-import gateway.initialize
 from ioc import INJECTED, Inject
 
 logger = logging.getLogger('openmotics')
 
 
-def cmd_get_realtime_power(args):
-    _ = args
-    gateway.initialize.setup_platform(message_client_name='openmotics_cli')
+parser = argparse.ArgumentParser()
+subparsers = parser.add_subparsers()
 
-    @Inject
-    def f(gateway_api=INJECTED):
-        return gateway_api.get_realtime_power()
-    print(f())
+operator_parser = subparsers.add_parser('operator')
+operator_subparsers = operator_parser.add_subparsers()
 
 
-def cmd_get_realtime_p1(args):
-    _ = args
-    gateway.initialize.setup_platform(message_client_name='openmotics_cli')
+def setup_logger():
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
 
-    @Inject
-    def f(gateway_api=INJECTED):
-        return gateway_api.get_realtime_p1()
-    print(f())
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    logger.addHandler(handler)
 
 
-def cmd_get_total_energy(args):
-    _ = args
-    gateway.initialize.setup_platform(message_client_name='openmotics_cli')
+def platform(name):
+    """
+    Wrap a command function with setup_platform and injections.
+    """
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapper(args, **kwargs):
+            setup_logger()
+            from gateway.initialize import setup_platform
+            setup_platform(name)
+            return Inject(f)(args, **kwargs)
+        return wrapper
+    return decorator
 
-    @Inject
-    def f(gateway_api=INJECTED):
-        return gateway_api.get_total_energy()
-    print(f())
+
+# Commands
+
+
+def cmd_version(args):
+    import gateway
+    print(gateway.__version__)
+
+
+version_parser = subparsers.add_parser('version')
+version_parser.set_defaults(cmd=cmd_version)
 
 
 def cmd_factory_reset(args):
@@ -65,31 +80,27 @@ def cmd_factory_reset(args):
         fd.write('factory_reset')
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--version', action='version', version=gateway.__version__)
-subparsers = parser.add_subparsers()
-
-controller_parser = subparsers.add_parser('controller')
-controller_subparsers = controller_parser.add_subparsers()
-realtime_power_parser = controller_subparsers.add_parser('realtime-power')
-realtime_power_parser.set_defaults(func=cmd_get_realtime_power)
-realtime_p1_parser = controller_subparsers.add_parser('realtime-p1')
-realtime_p1_parser.set_defaults(func=cmd_get_realtime_p1)
-total_energy_parser = controller_subparsers.add_parser('total-energy')
-total_energy_parser.set_defaults(func=cmd_get_total_energy)
-
-operator_parser = subparsers.add_parser('operator')
-operator_subparsers = operator_parser.add_subparsers()
 factory_reset_parser = operator_subparsers.add_parser('factory-reset')
-factory_reset_parser.set_defaults(func=cmd_factory_reset)
 factory_reset_parser.add_argument('--force', action='store_true')
+factory_reset_parser.set_defaults(cmd=cmd_factory_reset)
+
+
+@platform('openmotics_shell')
+def cmd_shell(args, gateway_api=INJECTED):
+    _ = args
+    import IPython
+    IPython.embed(header='''
+    Use `gateway_api` to interact with the gateway.
+    ''')
+
+
+shell_parser = operator_subparsers.add_parser('shell')
+shell_parser.set_defaults(cmd=cmd_shell)
 
 
 def main():
     args = parser.parse_args()
-    logger.addHandler(logging.StreamHandler(sys.stderr))
-    logger.setLevel(logging.INFO)
-    args.func(args)
+    args.cmd(args)
 
 
 if __name__ == '__main__':
