@@ -15,38 +15,33 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import absolute_import
 
-from platform_utils import System
-System.import_libs()
-
+import argparse
 import logging
 
-from bus.om_bus_service import MessageService
-from gateway.initialize import initialize
-from gateway.services.openmotics import OpenmoticsService
+from openmotics_cli import service
 
 logger = logging.getLogger('openmotics')
 
 
-def setup_logger():
-    """ Setup the OpenMotics logger. """
-
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-    logger.addHandler(handler)
-
-
-if __name__ == '__main__':
-    setup_logger()
-    initialize(message_client_name='openmotics_service')
-
+@service('openmotics_service')
+def openmotics_service(args):
     logger.info('Starting OpenMotics service')
+
     # TODO: move message service to separate process
+    from bus.om_bus_service import MessageService
     message_service = MessageService()
     message_service.start()
 
+    from gateway.services.openmotics import OpenmoticsService
     OpenmoticsService.fix_dependencies()
     OpenmoticsService.start()
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    args = parser.parse_args()
+    openmotics_service(args)
+
+
+if __name__ == '__main__':
+    main()

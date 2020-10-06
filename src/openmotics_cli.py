@@ -44,19 +44,35 @@ def setup_logger():
     logger.addHandler(handler)
 
 
-def platform(name):
-    """
-    Wrap a command function with setup_platform and injections.
-    """
+def setup_decorator(setup):
     def decorator(f):
         @functools.wraps(f)
         def wrapper(args, **kwargs):
             setup_logger()
-            from gateway.initialize import setup_platform
-            setup_platform(name)
+            setup()
             return Inject(f)(args, **kwargs)
         return wrapper
     return decorator
+
+
+def platform(name):
+    """
+    Wrap a command function with setup_platform and injections.
+    """
+    def setup():
+        from gateway.initialize import setup_platform
+        setup_platform(name)
+    return setup_decorator(setup)
+
+
+def service(name):
+    """
+    Wrap a command function with setup_service and injections.
+    """
+    def setup():
+        from gateway.initialize import setup_service
+        setup_service(name)
+    return setup_decorator(setup)
 
 
 # Commands

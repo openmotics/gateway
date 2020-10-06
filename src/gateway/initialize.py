@@ -54,7 +54,7 @@ if False:  # MYPY
 logger = logging.getLogger('openmotics')
 
 
-def initialize(message_client_name):
+def setup_service(message_client_name):
     # type: (Optional[str]) -> None
     logger.info('Initializing')
     init_lock = constants.get_init_lockfile()

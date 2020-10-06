@@ -15,34 +15,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import absolute_import
 
-from platform_utils import System
-System.import_libs()
-
+import argparse
 import logging
 
-from bus.om_bus_service import MessageService
-from gateway.initialize import initialize
-from gateway.services.vpn import VPNService
+from openmotics_cli import service
 
 logger = logging.getLogger('openmotics')
 
 
-def setup_logger():
-    """ Setup the OpenMotics logger. """
+@service('vpn_service')
+def vpn_service(args):
+    logger.info('Starting VPN service')
 
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
+    from gateway.services.vpn import VPNService
+    vpn_service = VPNService()
+    vpn_service.start()
 
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-    logger.addHandler(handler)
+
+def main():
+    parser = argparse.ArgumentParser()
+    args = parser.parse_args()
+    vpn_service(args)
 
 
 if __name__ == '__main__':
-    setup_logger()
-    initialize(message_client_name='vpn_service')
-
-    logger.info('Starting VPN service')
-    vpn_service = VPNService()
-    vpn_service.start()
+    main()
