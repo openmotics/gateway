@@ -16,38 +16,22 @@
 Tool to bootload the power modules from the command line.
 """
 from __future__ import absolute_import
-from platform_utils import System
-System.import_libs()
 
-import intelhex
-import constants
-import sys
 import argparse
 import logging
+import sys
 import time
+from argparse import Namespace
 from logging import handlers
+
+import intelhex
+
+import constants
 from ioc import INJECTED, Inject
-from serial_utils import CommunicationTimedOutException
 from power import power_api
-from gateway.initialize import setup_minimal_power_platform
+from serial_utils import CommunicationTimedOutException
 
-logger = logging.getLogger("openmotics")
-
-
-def setup_logger():
-    """ Setup the OpenMotics logger. """
-    logger.setLevel(logging.DEBUG)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
-
-    handler = handlers.RotatingFileHandler(constants.get_update_log_location(), maxBytes=3 * 1024 ** 2, backupCount=2)
-    handler.setLevel(logging.DEBUG)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
+logger = logging.getLogger('openmotics')
 
 
 class HexReader(object):
@@ -263,41 +247,14 @@ def bootload_p1_concentrator(module_address, hex_file, power_communicator, versi
     logger.info('C{0} - Done'.format(module_address))
 
 
-def main():
+@Inject
+def _get_from_ioc(power_store=INJECTED, power_communicator=INJECTED, power_serial=INJECTED):
+    return power_store, power_communicator, power_serial
+
+
+def power_bootloader(args):
+    # type: (Namespace) -> None
     """ The main function. """
-    logger.info('Bootloader for Energy/Power Modules and P1 Concentrator')
-    logger.info('Command: {0}'.format(' '.join(sys.argv)))
-
-    parser = argparse.ArgumentParser(description='Tool to bootload a module.')
-    parser.add_argument('--address', dest='address', type=int,
-                        help='the address of the module to bootload')
-    parser.add_argument('--all', dest='all', action='store_true',
-                        help='bootload all modules')
-    parser.add_argument('--file', dest='file',
-                        help='the filename of the hex file to bootload')
-    parser.add_argument('--8', dest='old', action='store_true',
-                        help='bootload for the 8-port power modules')
-    parser.add_argument('--p1c', dest='p1c', action='store_true',
-                        help='bootload for the P1 concentrator modules')
-    parser.add_argument('--verbose', dest='verbose', action='store_true',
-                        help='show the serial output')
-    parser.add_argument('--scan', dest='scan', action='store_true',
-                        help='Scan the energy bus for modules')
-    parser.add_argument('--version', dest='firmware_version', required=False,
-                        help='version of the provided hex file')
-
-    args = parser.parse_args()
-
-    if not args.file and not args.scan:
-        parser.print_help()
-        return
-
-    setup_minimal_power_platform()
-
-    @Inject
-    def _get_from_ioc(power_store=INJECTED, power_communicator=INJECTED, power_serial=INJECTED):
-        return power_store, power_communicator, power_serial
-
     store, communicator, serial = _get_from_ioc()
     serial.start()
 
@@ -350,9 +307,4 @@ def main():
             module = modules[0]
             _bootload(module, address, args.file)
     else:
-        parser.print_help()
-
-
-if __name__ == '__main__':
-    setup_logger()
-    main()
+        raise Exception('An address or --all is required')
