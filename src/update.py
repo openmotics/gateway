@@ -19,25 +19,34 @@ import argparse
 import logging
 
 import constants
-from gateway.tools.update import update
+from openmotics_cli import settings
 
 logger = logging.getLogger('update.py')
 
 
 def setup_update_output():
+    # type: () -> None
     logging.basicConfig(level=logging.INFO, filemode='w', format='%(message)s',
                         filename=constants.get_update_output_file())
     logger.setLevel(logging.DEBUG)
+
+
+@settings()
+def cmd_update(args):
+    # type: (argparse.Namespace) -> None
+    setup_update_output()
+
+    from gateway.tools.update import update
+    update(args)
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('version')
     parser.add_argument('md5', nargs='?')
-    args = parser.parse_args()
 
-    setup_update_output()
-    update(args)
+    args = parser.parse_args()
+    cmd_update(args)
 
 
 if __name__ == '__main__':

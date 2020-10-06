@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright (C) 2020 OpenMotics BV
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,39 +18,23 @@ Module to work update a Core
 """
 
 from __future__ import absolute_import
+
 from platform_utils import System
 System.import_libs()
 
-import sys
-import logging
-import constants
-from six.moves.configparser import ConfigParser
+import argparse
+
 from serial import Serial
+from six.moves.configparser import ConfigParser
+
+import constants
 from ioc import Injectable
-from master.core.core_updater import CoreUpdater
-
-logger = logging.getLogger("openmotics")
+from openmotics_cli import settings
 
 
-def setup_logger():
-    """ Setup the OpenMotics logger. """
-
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
-
-
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage:')
-        print('{0} firmware_filename'.format(sys.argv[0]))
-        sys.exit(1)
-    firmware_filename = sys.argv[1]
-
+@settings()
+def cmd_update(args):
+    # type: (argparse.Namespace) -> None
     config = ConfigParser()
     config.read(constants.get_config_file())
     core_cli_serial_port = config.get('OpenMotics', 'cli_serial')
@@ -57,5 +42,18 @@ if __name__ == '__main__':
     Injectable.value(master_communicator=None)
     Injectable.value(maintenance_communicator=None)
 
-    setup_logger()
-    CoreUpdater.update(hex_filename=firmware_filename)
+    from master.core.core_updater import CoreUpdater
+    CoreUpdater.update(hex_filename=args.firmware_filename)
+
+
+def main():
+    # type: () -> None
+    parser = argparse.ArgumentParser()
+    parser.add_argument('firmware_filename')
+
+    args = parser.parse_args()
+    cmd_update(args)
+
+
+if __name__ == '__main__':
+    main()
