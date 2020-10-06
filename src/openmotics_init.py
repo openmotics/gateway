@@ -17,9 +17,6 @@ The main module for the OpenMotics
 """
 from __future__ import absolute_import
 
-from platform_utils import System
-System.import_libs()
-
 import logging
 
 logger = logging.getLogger('openmotics')

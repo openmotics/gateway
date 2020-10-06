@@ -16,9 +16,6 @@
 
 from __future__ import absolute_import
 
-from platform_utils import Platform, System
-System.import_libs()
-
 import argparse
 import fcntl
 import glob
@@ -27,7 +24,6 @@ import logging
 import os
 import shutil
 import subprocess
-import sys
 import time
 from datetime import datetime
 
@@ -36,6 +32,7 @@ from six.moves.configparser import ConfigParser, NoOptionError
 from six.moves.urllib.parse import urlparse, urlunparse
 
 import constants
+from platform_utils import Platform, System
 
 logger = logging.getLogger('update.py')
 

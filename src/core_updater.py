@@ -19,9 +19,6 @@ Module to work update a Core
 
 from __future__ import absolute_import
 
-from platform_utils import System
-System.import_libs()
-
 import argparse
 
 from serial import Serial

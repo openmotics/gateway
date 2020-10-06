@@ -23,9 +23,6 @@ import sys
 # TODO setup load paths properly
 sys.path.insert(0, os.path.abspath(os.path.join(__file__, '..', '..')))
 
-from platform_utils import System
-System.import_libs()
-
 from gateway.settings import setup_global_arguments
 from openmotics_cli import settings
 

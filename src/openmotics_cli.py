@@ -23,6 +23,7 @@ import os
 import constants
 from gateway.settings import setup_global_arguments, setup_settings
 from ioc import INJECTED, Inject
+from platform_utils import System
 
 logger = logging.getLogger('openmotics')
 
@@ -50,6 +51,7 @@ def setup_decorator(setup):
         def wrapper(args, **kwargs):
             setup_settings(args)
             setup_logger()
+            System.import_libs()
             setup()
             return Inject(f)(args, **kwargs)
         return wrapper

@@ -19,17 +19,18 @@ For more information, see:
 * https://wiki.openmotics.com/index.php/Bootloader_Error_Codes
 """
 from __future__ import absolute_import
-from platform_utils import System
-System.import_libs()
 
+import logging
 import time
 import traceback
+
 import intelhex
-import logging
+
 import master.classic.master_api as master_api
-from ioc import Inject, INJECTED
-from master.classic.master_communicator import MasterCommunicator, CommunicationTimedOutException
-from master.classic.eeprom_controller import EepromFile, EepromAddress
+from ioc import INJECTED, Inject
+from master.classic.eeprom_controller import EepromAddress, EepromFile
+from master.classic.master_communicator import CommunicationTimedOutException, \
+    MasterCommunicator
 
 if False:  # MYPY
     from typing import Tuple, List, Dict, Any, Union, Optional

@@ -15,9 +15,6 @@
 
 from __future__ import absolute_import
 
-from platform_utils import Platform, System
-System.import_libs()
-
 import fcntl
 import logging
 import os
@@ -42,11 +39,11 @@ from master.classic.master_communicator import MasterCommunicator
 from master.core.core_communicator import CoreCommunicator
 from master.core.maintenance import MaintenanceCoreCommunicator
 from master.core.memory_file import MemoryFile, MemoryTypes
+from platform_utils import Platform
 from power.power_communicator import PowerCommunicator
 from power.power_controller import P1Controller, PowerController
 from power.power_store import PowerStore
 from serial_utils import RS485
-
 
 if False:  # MYPY
     from typing import Any, Optional

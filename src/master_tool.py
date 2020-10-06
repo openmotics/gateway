@@ -48,9 +48,6 @@ def cmd_port(args):
     # type: (argparse.Namespace) -> None
     _ = args
 
-    from platform_utils import System
-    System.import_libs()
-
     from six.moves.configparser import ConfigParser
     config = ConfigParser()
     config.read(constants.get_config_file())

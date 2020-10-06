@@ -23,6 +23,7 @@ import subprocess
 import sys
 
 import constants
+from gateway.settings import Settings
 
 logger = logging.getLogger('openmotics')
 
@@ -224,13 +225,15 @@ class System(object):
 
     @staticmethod
     def import_libs():
-        operating_system = System.get_operating_system().get('ID')
-        if operating_system in (System.OS.ANGSTROM, System.OS.DEBIAN):
-            sys.path.insert(0, '/opt/openmotics/python-deps/lib/python2.7/site-packages')
+        # type: () -> None
+        site_packages = Settings.get_python_site_packages()
+        if os.path.exists(site_packages):
+            sys.path.insert(0, site_packages)
         else:
-            logger.warning('could not configure imports for unknown platform, skipped')
+            logger.warning('python dir %s does not exist', site_packages)
 
         # Patching where/if required
+        operating_system = System.get_operating_system().get('ID')
         if operating_system == System.OS.ANGSTROM:
             from pkg_resources import resource_filename, resource_stream, Requirement
             resource_stream(Requirement.parse('requests'), 'requests/cacert.pem')

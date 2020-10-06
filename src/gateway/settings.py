@@ -15,22 +15,36 @@
 from __future__ import absolute_import
 
 import os
+import sys
 
 from ioc import INJECTED, Inject, Injectable
 
 if False:  # MYPY
     import argparse
 
+# Defaults
+OPT_OPENMOTICS = '/opt/openmotics'
+SITE_PACKAGES = 'lib/python{0}.{1}/site-packages'.format(sys.version_info.major,
+                                                         sys.version_info.minor)
+
 
 class Settings(object):
     def __init__(self, args):
         # type: (argparse.Namespace) -> None
-        pass
+        self.python_dir = args.python_dir
+
+    @staticmethod
+    @Inject
+    def get_python_site_packages(settings=INJECTED):
+        # type: (Settings) -> str
+        return os.path.join(settings.python_dir, SITE_PACKAGES)
 
 
 def setup_global_arguments(parser):
     # type: (argparse.ArgumentParser) -> None
-    pass
+    parser.add_argument('--python-dir',
+                        default=os.path.join(OPT_OPENMOTICS, 'python-deps'),
+                        help='Location of python dependencies')
 
 
 def setup_settings(args):
