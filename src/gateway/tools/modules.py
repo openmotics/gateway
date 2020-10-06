@@ -16,38 +16,16 @@
 Tool to bootload the slave modules (output, dimmer, input, temperature, ...)
 """
 from __future__ import absolute_import
-from platform_utils import System, Platform
-System.import_libs()
 
-import argparse
-import constants
-import time
-import os
-import sys
 import logging
-from logging import handlers
-from six.moves.configparser import ConfigParser
+import os
+import time
+from argparse import Namespace
+
 from ioc import INJECTED, Inject
-from gateway.initialize import setup_minimal_master_platform
+from platform_utils import Platform
 
 logger = logging.getLogger("openmotics")
-
-
-def setup_logger():
-    """ Setup the OpenMotics logger. """
-
-    logger.setLevel(logging.DEBUG)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
-
-    handler = handlers.RotatingFileHandler(constants.get_update_log_location(), maxBytes=3 * 1024 ** 2, backupCount=2)
-    handler.setLevel(logging.DEBUG)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
 
 
 @Inject
@@ -55,36 +33,14 @@ def get_communicator(master_communicator=INJECTED):
     return master_communicator
 
 
-def main():
-    supported_modules = ['O', 'R', 'D', 'I', 'T', 'C']
-    supported_modules_gen3 = ['O3', 'R3', 'D3', 'I3', 'T3', 'C3']
-    supported_can_modules = ['UC']
-    all_supported_modules = supported_modules + supported_modules_gen3 + supported_can_modules
-
-    parser = argparse.ArgumentParser(description='Tool to bootload the slave modules.')
-
-    parser.add_argument('-t', '--type', dest='type', choices=all_supported_modules + [m.lower() for m in all_supported_modules], required=True,
-                        help='The type of module to bootload (choices: {0})'.format(', '.join(all_supported_modules)))
-    parser.add_argument('-f', '--file', dest='file', required=True,
-                        help='The filename of the hex file to bootload')
-    parser.add_argument('-v', '--version', dest='version', required=False,
-                        help='The version of the firmware to flash')
-    parser.add_argument('--verbose', dest='verbose', action='store_true',
-                        help='Show the serial output')
-
-    args = parser.parse_args()
+def modules_bootloader(args):
+    # type: (Namespace) -> bool
     module_type = args.type.upper()
     filename = args.file
     version = args.version
     gen3_firmware = module_type.endswith('3')
     if gen3_firmware:
         module_type = module_type[0]
-
-    config = ConfigParser()
-    config.read(constants.get_config_file())
-    port = config.get('OpenMotics', 'controller_serial')
-
-    setup_minimal_master_platform(port)
 
     communicator = get_communicator()
     communicator.start()
@@ -120,10 +76,3 @@ def main():
         time.sleep(3)
 
     return update_success
-
-
-if __name__ == '__main__':
-    setup_logger()
-    success = main()
-    if not success:
-        sys.exit(1)
