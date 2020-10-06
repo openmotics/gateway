@@ -15,43 +15,36 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import absolute_import
 
-from platform_utils import System, Platform
-System.import_libs()
-
 import argparse
-import time
-import os
 import sys
 import logging
 from logging import handlers
 
-from six.moves.configparser import ConfigParser
-
 import constants
-from gateway.initialize import setup_minimal_master_platform
-from gateway.tools.modules import modules_bootloader
+from openmotics_cli import minimal_master
 
 logger = logging.getLogger('openmotics')
 
 
-def setup_logger():
-    """ Setup the OpenMotics logger. """
-
-    logger.setLevel(logging.DEBUG)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-    logger.addHandler(handler)
-
+def setup_update_log():
+    # type: () -> None
     handler = handlers.RotatingFileHandler(constants.get_update_log_location(), maxBytes=3 * 1024 ** 2, backupCount=2)
     handler.setLevel(logging.DEBUG)
     handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
     logger.addHandler(handler)
 
 
+@minimal_master()
+def cmd_bootloader(args):
+    # type: (argparse.Namespace) -> bool
+    setup_update_log()
+
+    from gateway.tools.modules import modules_bootloader
+    return modules_bootloader(args)
+
+
 def main():
+    # type: () -> None
     supported_modules = ['O', 'R', 'D', 'I', 'T', 'C']
     supported_modules_gen3 = ['O3', 'R3', 'D3', 'I3', 'T3', 'C3']
     supported_can_modules = ['UC']
@@ -70,17 +63,10 @@ def main():
 
     args = parser.parse_args()
 
-    config = ConfigParser()
-    config.read(constants.get_config_file())
-    port = config.get('OpenMotics', 'controller_serial')
-
-    setup_minimal_master_platform(port)
-
-    success = modules_bootloader(args)
+    success = cmd_bootloader(args)
     if not success:
         sys.exit(1)
 
 
 if __name__ == '__main__':
-    setup_logger()
     main()

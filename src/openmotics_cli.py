@@ -19,7 +19,6 @@ import argparse
 import functools
 import logging
 import os
-import sys
 
 import constants
 from ioc import INJECTED, Inject
@@ -55,6 +54,15 @@ def setup_decorator(setup):
     return decorator
 
 
+def settings():
+    """
+    Wrap a command function with settings.
+    """
+    def setup():
+        pass
+    return setup_decorator(setup)
+
+
 def platform(name):
     """
     Wrap a command function with setup_platform and injections.
@@ -62,6 +70,26 @@ def platform(name):
     def setup():
         from gateway.initialize import setup_platform
         setup_platform(name)
+    return setup_decorator(setup)
+
+
+def minimal_master():
+    """
+    Wrap a command function a minimal master platform and injections.
+    """
+    def setup():
+        from gateway.initialize import setup_minimal_master_platform
+        setup_minimal_master_platform()
+    return setup_decorator(setup)
+
+
+def minimal_power():
+    """
+    Wrap a command function a minimal power platform and injections.
+    """
+    def setup():
+        from gateway.initialize import setup_minimal_power_platform
+        setup_minimal_power_platform()
     return setup_decorator(setup)
 
 
@@ -87,6 +115,7 @@ version_parser = subparsers.add_parser('version')
 version_parser.set_defaults(cmd=cmd_version)
 
 
+@settings()
 def cmd_factory_reset(args):
     lock_file = constants.get_init_lockfile()
     if os.path.isfile(lock_file) and not args.force:

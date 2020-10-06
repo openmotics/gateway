@@ -25,6 +25,7 @@ logger = logging.getLogger('openmotics')
 
 @service('vpn_service')
 def vpn_service(args):
+    # type: (argparse.Namespace) -> None
     logger.info('Starting VPN service')
 
     from gateway.services.vpn import VPNService
@@ -33,6 +34,7 @@ def vpn_service(args):
 
 
 def main():
+    # type: () -> None
     parser = argparse.ArgumentParser()
     args = parser.parse_args()
     vpn_service(args)

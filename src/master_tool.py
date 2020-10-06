@@ -15,43 +15,51 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import absolute_import
 
-from platform_utils import System
-System.import_libs()
-
 import argparse
 import logging
 from logging import handlers
-from six.moves.configparser import ConfigParser
 
 import constants
-from gateway.initialize import setup_minimal_master_platform
-from gateway.tools.master import master_tool
-
+from openmotics_cli import minimal_master, settings
 
 logger = logging.getLogger('openmotics')
 
 
-def setup_logger():
+def setup_update_log():
     # type: () -> None
-    """ Setup the OpenMotics logger. """
-
-    logger.setLevel(logging.DEBUG)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-    logger.addHandler(handler)
-
     handler = handlers.RotatingFileHandler(constants.get_update_log_location(), maxBytes=3 * 1024 ** 2, backupCount=2)
     handler.setLevel(logging.DEBUG)
     handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
     logger.addHandler(handler)
 
 
+@minimal_master()
+def cmd_tool(args):
+    # type: (argparse.Namespace) -> None
+    setup_update_log()
+
+    from gateway.tools.master import master_tool
+    master_tool(args)
+
+
+@settings()
+def cmd_port(args):
+    # type: (argparse.Namespace) -> None
+    _ = args
+
+    from platform_utils import System
+    System.import_libs()
+
+    from six.moves.configparser import ConfigParser
+    config = ConfigParser()
+    config.read(constants.get_config_file())
+
+    port = config.get('OpenMotics', 'controller_serial')
+    print(port)
+
+
 def main():
     # type: () -> None
-    """ The main function. """
     parser = argparse.ArgumentParser(description='Tool to control the master.')
     parser.add_argument('--port', dest='port', action='store_true',
                         help='get the serial port device')
@@ -73,22 +81,13 @@ def main():
                         help='path to the hexfile with the core+ firmware')
 
     args = parser.parse_args()
-
-    setup_logger()
-
-    config = ConfigParser()
-    config.read(constants.get_config_file())
-
-    port = config.get('OpenMotics', 'controller_serial')
     if args.port:
-        print(port)
+        cmd_port(args)
         return
-
     if not any([args.sync, args.version, args.reset, args.hardreset, args.wipe, args.update]):
         parser.print_help()
 
-    setup_minimal_master_platform(port)
-    master_tool(args)
+    cmd_tool(args)
 
 
 if __name__ == '__main__':

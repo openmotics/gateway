@@ -268,10 +268,11 @@ def setup_target_platform(target_platform, message_client_name):
     Injectable.value(ssl_certificate=constants.get_ssl_certificate_file())
 
 
-def setup_minimal_master_platform(port):
-    # type: (str) -> None
+def setup_minimal_master_platform():
+    # type: () -> None
     config = ConfigParser()
     config.read(constants.get_config_file())
+    port = config.get('OpenMotics', 'controller_serial')
 
     platform = Platform.get_platform()
     Injectable.value(controller_serial=Serial(port, 115200))

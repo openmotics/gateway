@@ -25,6 +25,7 @@ logger = logging.getLogger('openmotics')
 
 @service('openmotics_service')
 def openmotics_service(args):
+    # type: (argparse.Namespace) -> None
     logger.info('Starting OpenMotics service')
 
     # TODO: move message service to separate process
@@ -38,6 +39,7 @@ def openmotics_service(args):
 
 
 def main():
+    # type: () -> None
     parser = argparse.ArgumentParser()
     args = parser.parse_args()
     openmotics_service(args)
