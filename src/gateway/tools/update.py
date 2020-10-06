@@ -19,6 +19,7 @@ from __future__ import absolute_import
 from platform_utils import Platform, System
 System.import_libs()
 
+import argparse
 import fcntl
 import glob
 import hashlib
@@ -36,9 +37,8 @@ from six.moves.urllib.parse import urlparse, urlunparse
 
 import constants
 
-logging.basicConfig(level=logging.INFO, filemode='w', format='%(message)s', filename=constants.get_update_output_file())
 logger = logging.getLogger('update.py')
-logger.setLevel(logging.DEBUG)
+
 
 PREFIX = '/opt/openmotics'
 SUPERVISOR_SERVICES = ('openmotics', 'vpn_service')
@@ -366,7 +366,7 @@ def update_gateway_frontend(tarball, date, version):
         return exc
 
 
-def update(version, expected_md5):
+def perform_update(version, expected_md5):
     """
     Execute the actual update: extract the archive and execute the bash update script.
 
@@ -509,16 +509,9 @@ def update(version, expected_md5):
         logger.info('exit 0')
 
 
-def main():
-    """ The main function. """
-    if len(sys.argv) != 3:
-        print('Usage: python ' + __file__ + ' version md5sum')
-        sys.exit(1)
-
-    (version, expected_md5) = (sys.argv[1], sys.argv[2])
-
-    # Start with version line, this is expected by the cloud.
-    logger.info(version)
+def update(args):
+    # type: (argparse.Namespace) -> None
+    logger.info(args.version)
 
     lockfile = constants.get_update_lockfile()
     with open(lockfile, 'wc') as wfd:
@@ -530,14 +523,10 @@ def main():
             logger.error('exit 1')
             raise SystemExit(1)
         try:
-            update(version, expected_md5)
+            perform_update(args.version, args.md5)
         except SystemExit:
             logger.error('FAILED')
             logger.error('exit 1')
         finally:
             fcntl.flock(wfd, fcntl.LOCK_UN)
             os.unlink(lockfile)
-
-
-if __name__ == '__main__':
-    main()
