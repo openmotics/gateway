@@ -21,6 +21,7 @@ import sys
 from logging import handlers
 
 import constants
+from gateway.settings import setup_global_arguments
 from openmotics_cli import minimal_power
 
 logger = logging.getLogger('openmotics')
@@ -62,6 +63,7 @@ def main():
                         help='Scan the energy bus for modules')
     parser.add_argument('--version', dest='firmware_version', required=False,
                         help='version of the provided hex file')
+    setup_global_arguments(parser)
     args = parser.parse_args()
 
     if not args.file and not args.scan:

@@ -28,6 +28,7 @@ from serial import Serial
 from six.moves.configparser import ConfigParser
 
 import constants
+from gateway.settings import setup_global_arguments
 from ioc import Injectable
 from openmotics_cli import settings
 
@@ -50,6 +51,7 @@ def main():
     # type: () -> None
     parser = argparse.ArgumentParser()
     parser.add_argument('firmware_filename')
+    setup_global_arguments(parser)
 
     args = parser.parse_args()
     cmd_update(args)

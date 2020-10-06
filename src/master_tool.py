@@ -20,6 +20,7 @@ import logging
 from logging import handlers
 
 import constants
+from gateway.settings import setup_global_arguments
 from openmotics_cli import minimal_master, settings
 
 logger = logging.getLogger('openmotics')
@@ -79,6 +80,7 @@ def main():
                         help='path to the hexfile with the classic firmware')
     parser.add_argument('--master-firmware-core',
                         help='path to the hexfile with the core+ firmware')
+    setup_global_arguments(parser)
 
     args = parser.parse_args()
     if args.port:

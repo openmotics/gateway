@@ -21,6 +21,7 @@ import logging
 from logging import handlers
 
 import constants
+from gateway.settings import setup_global_arguments
 from openmotics_cli import minimal_master
 
 logger = logging.getLogger('openmotics')
@@ -60,7 +61,7 @@ def main():
                         help='The version of the firmware to flash')
     parser.add_argument('--verbose', dest='verbose', action='store_true',
                         help='Show the serial output')
-
+    setup_global_arguments(parser)
     args = parser.parse_args()
 
     success = cmd_bootloader(args)

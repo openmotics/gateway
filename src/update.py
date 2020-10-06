@@ -19,6 +19,7 @@ import argparse
 import logging
 
 import constants
+from gateway.settings import setup_global_arguments
 from openmotics_cli import settings
 
 logger = logging.getLogger('update.py')
@@ -44,6 +45,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('version')
     parser.add_argument('md5', nargs='?')
+    setup_global_arguments(parser)
 
     args = parser.parse_args()
     cmd_update(args)

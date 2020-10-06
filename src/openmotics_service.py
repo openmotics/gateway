@@ -18,6 +18,7 @@ from __future__ import absolute_import
 import argparse
 import logging
 
+from gateway.settings import setup_global_arguments
 from openmotics_cli import service
 
 logger = logging.getLogger('openmotics')
@@ -41,6 +42,7 @@ def openmotics_service(args):
 def main():
     # type: () -> None
     parser = argparse.ArgumentParser()
+    setup_global_arguments(parser)
     args = parser.parse_args()
     openmotics_service(args)
 
