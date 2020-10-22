@@ -165,7 +165,7 @@ class System(object):
 
     @staticmethod
     def _use_pyopenssl():
-        return System.get_operating_system()['ID'] == System.OS.ANGSTROM
+        return System.get_operating_system().get('ID') == System.OS.ANGSTROM
 
     @staticmethod
     def get_ssl_socket(sock, private_key_filename, certificate_filename):
@@ -240,10 +240,11 @@ class Platform(object):
     """
 
     class Type(object):
+        DUMMY = 'DUMMY'
         CLASSIC = 'CLASSIC'
         CORE_PLUS = 'CORE_PLUS'
 
-    Types = [Type.CLASSIC, Type.CORE_PLUS]
+    Types = [Type.DUMMY, Type.CLASSIC, Type.CORE_PLUS]
 
     @staticmethod
     def get_platform():

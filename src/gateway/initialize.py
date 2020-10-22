@@ -232,9 +232,16 @@ def setup_target_platform(target_platform, message_client_name):
     Injectable.value(pulse_db=constants.get_pulse_counter_database_file())
 
     # Master Controller
-    controller_serial_port = config.get('OpenMotics', 'controller_serial')
-    Injectable.value(controller_serial=Serial(controller_serial_port, 115200))
-    if target_platform == Platform.Type.CORE_PLUS:
+    if target_platform == Platform.Type.DUMMY:
+        pass
+    else:
+        controller_serial_port = config.get('OpenMotics', 'controller_serial')
+        Injectable.value(controller_serial=Serial(controller_serial_port, 115200))
+
+    if target_platform == Platform.Type.DUMMY:
+        Injectable.value(maintenance_communicator=None)
+        Injectable.value(master_controller=None)
+    elif target_platform == Platform.Type.CORE_PLUS:
         # FIXME don't create singleton for optional controller?
         from master.core import ucan_communicator, slave_communicator
         _ = ucan_communicator, slave_communicator
@@ -249,7 +256,7 @@ def setup_target_platform(target_platform, message_client_name):
         Injectable.value(memory_files={MemoryTypes.EEPROM: MemoryFile(MemoryTypes.EEPROM),
                                        MemoryTypes.FRAM: MemoryFile(MemoryTypes.FRAM)})
         Injectable.value(master_controller=MasterCoreController())
-    else:
+    elif target_platform == Platform.Type.CLASSIC:
         # FIXME don't create singleton for optional controller?
         from master.classic import eeprom_extension
         _ = eeprom_extension
@@ -266,13 +273,17 @@ def setup_target_platform(target_platform, message_client_name):
         Injectable.value(master_communicator=MasterCommunicator())
         Injectable.value(maintenance_communicator=MaintenanceClassicCommunicator())
         Injectable.value(master_controller=MasterClassicController())
+    else:
+        logger.warning('Unhandled master implementation for %s', target_platform)
 
-    if target_platform == Platform.Type.CORE_PLUS:
+    if target_platform == Platform.Type.DUMMY:
+        Injectable.value(frontpanel_controller=None)
+    elif target_platform == Platform.Type.CORE_PLUS:
         Injectable.value(frontpanel_controller=FrontpanelCoreController())
     elif target_platform == Platform.Type.CLASSIC:
         Injectable.value(frontpanel_controller=FrontpanelClassicController())
     else:
-        Injectable.value(frontpanel_controller=None)
+        logger.warning('Unhandled frontpanel implementation for %s', target_platform)
 
     # Thermostats
     thermostats_gateway_feature = Feature.get_or_none(name='thermostats_gateway')

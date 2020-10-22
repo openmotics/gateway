@@ -42,7 +42,8 @@ class MaintenanceController(object):
         self._privatekey_filename = ssl_private_key
         self._certificate_filename = ssl_certificate
         self._maintenance_communicator = maintenance_communicator
-        self._maintenance_communicator.set_receiver(self._received_data)
+        if self._maintenance_communicator:
+            self._maintenance_communicator.set_receiver(self._received_data)
         self._connection = None
         self._server_thread = None
 
@@ -51,10 +52,14 @@ class MaintenanceController(object):
     #######################
 
     def start(self):
-        self._maintenance_communicator.start()
+        # type: () -> None
+        if self._maintenance_communicator:
+            self._maintenance_communicator.start()
 
     def stop(self):
-        self._maintenance_communicator.stop()
+        # type: () -> None
+        if self._maintenance_communicator:
+            self._maintenance_communicator.stop()
 
     def _received_data(self, message):
         try:
