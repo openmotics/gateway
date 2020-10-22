@@ -19,10 +19,9 @@ from __future__ import absolute_import
 
 from gateway.dto import GroupActionDTO, InputDTO, OutputDTO, PulseCounterDTO, \
     SensorDTO, ShutterDTO, ShutterGroupDTO, ThermostatDTO, ModuleDTO
-from gateway.hal.master_event import MasterEvent
 
 if False:  # MYPY
-    from typing import Any, Callable, Dict, List, Literal, Optional, Tuple
+    from typing import Any, Dict, List, Literal, Optional, Tuple
 
     HEALTH = Literal['success', 'unstable', 'failure']
 
@@ -307,18 +306,21 @@ class MasterController(object):
         raise NotImplementedError()
 
     def get_sensors_temperature(self):
+        # type: () -> List[Optional[float]]
         raise NotImplementedError()
 
     def get_sensor_humidity(self, sensor_id):
         raise NotImplementedError()
 
     def get_sensors_humidity(self):
+        # type: () -> List[Optional[float]]
         raise NotImplementedError()
 
     def get_sensor_brightness(self, sensor_id):
         raise NotImplementedError()
 
     def get_sensors_brightness(self):
+        # type: () -> List[Optional[float]]
         raise NotImplementedError()
 
     def set_virtual_sensor(self, sensor_id, temperature, humidity, brightness):
@@ -438,6 +440,7 @@ class MasterController(object):
     # Error functions
 
     def error_list(self):
+        # type: () -> List[Tuple[str,int]]
         raise NotImplementedError()
 
     def last_success(self):

@@ -36,6 +36,7 @@ from gateway.hal.frontpanel_controller_classic import FrontpanelClassicControlle
 from gateway.hal.frontpanel_controller_core import FrontpanelCoreController
 from gateway.hal.master_controller_classic import MasterClassicController
 from gateway.hal.master_controller_core import MasterCoreController
+from gateway.hal.master_controller_dummy import MasterDummyController
 from gateway.models import Database, Feature
 from gateway.thermostat.gateway.thermostat_controller_gateway import \
     ThermostatControllerGateway
@@ -240,7 +241,8 @@ def setup_target_platform(target_platform, message_client_name):
 
     if target_platform == Platform.Type.DUMMY:
         Injectable.value(maintenance_communicator=None)
-        Injectable.value(master_controller=None)
+        Injectable.value(passthrough_service=None)
+        Injectable.value(master_controller=MasterDummyController())
     elif target_platform == Platform.Type.CORE_PLUS:
         # FIXME don't create singleton for optional controller?
         from master.core import ucan_communicator, slave_communicator
