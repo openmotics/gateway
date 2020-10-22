@@ -190,7 +190,8 @@ class OpenmoticsService(object):
         ventilation_controller.start()
         metrics_collector.start()
         web_service.start()
-        frontpanel_controller.start()
+        if frontpanel_controller:
+            frontpanel_controller.start()
         event_sender.start()
         watchdog.start()
         plugin_controller.start()
@@ -226,7 +227,8 @@ class OpenmoticsService(object):
             ventilation_controller.start()
             thermostat_controller.stop()
             plugin_controller.stop()
-            frontpanel_controller.stop()
+            if frontpanel_controller:
+                frontpanel_controller.stop()
             event_sender.stop()
             logger.info('Stopping OM core service... Done')
             signal_request['stop'] = True

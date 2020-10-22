@@ -16,13 +16,15 @@
 Module for the frontpanel
 """
 from __future__ import absolute_import
+
 import fcntl
 import logging
 import time
-from ioc import Inject, INJECTED, Injectable, Singleton
-from platform_utils import Hardware
-from gateway.hal.frontpanel_controller import FrontpanelController
+
 from gateway.daemon_thread import DaemonThread
+from gateway.hal.frontpanel_controller import FrontpanelController
+from ioc import INJECTED, Inject
+from platform_utils import Hardware
 
 if False:  # MYPY
     from typing import Dict, Optional
@@ -30,8 +32,6 @@ if False:  # MYPY
 logger = logging.getLogger("openmotics")
 
 
-@Injectable.named('frontpanel_controller')
-@Singleton
 class FrontpanelClassicController(FrontpanelController):
 
     IOCTL_I2C_SLAVE = 0x0703

@@ -314,7 +314,7 @@ class WebInterface(object):
         self._sensor_controller = sensor_controller  # type: SensorController
         self._pulse_counter_controller = pulse_counter_controller  # type: PulseCounterController
         self._group_action_controller = group_action_controller  # type: GroupActionController
-        self._frontpanel_controller = frontpanel_controller  # type: FrontpanelController
+        self._frontpanel_controller = frontpanel_controller  # type: Optional[FrontpanelController]
         self._module_controller = module_controller  # type: ModuleController
         self._ventilation_controller = ventilation_controller  # type: VentilationController
 
@@ -330,7 +330,11 @@ class WebInterface(object):
         self._service_state = False
 
     def in_authorized_mode(self):
-        return self._frontpanel_controller.authorized_mode
+        # type: () -> bool
+        if self._frontpanel_controller:
+            return self._frontpanel_controller.authorized_mode
+        else:
+            return False
 
     def set_service_state(self, state):
         self._service_state = state
@@ -2460,8 +2464,11 @@ class WebInterface(object):
     @openmotics_api(auth=True)
     def indicate(self):
         """ Blinks the Status led on the Gateway to indicate the module """
-        self._frontpanel_controller.indicate()
-        return {}
+        if self._frontpanel_controller:
+            self._frontpanel_controller.indicate()
+            return {}
+        else:
+            raise NotImplementedError()
 
     @cherrypy.expose
     @cherrypy.tools.cors()

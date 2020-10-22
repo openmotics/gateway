@@ -16,14 +16,16 @@
 Module for the frontpanel
 """
 from __future__ import absolute_import
+
 import logging
 import time
 from threading import Lock
-from ioc import INJECTED, Inject, Injectable, Singleton
+
 from gateway.daemon_thread import DaemonThread
 from gateway.hal.frontpanel_controller import FrontpanelController
+from ioc import INJECTED, Inject
 from master.core.core_api import CoreAPI
-from master.core.core_communicator import BackgroundConsumer, CoreCommunicator
+from master.core.core_communicator import BackgroundConsumer
 from master.core.events import Event as MasterCoreEvent
 
 if False:  # MYPY
@@ -33,8 +35,6 @@ if False:  # MYPY
 logger = logging.getLogger("openmotics")
 
 
-@Injectable.named('frontpanel_controller')
-@Singleton
 class FrontpanelCoreController(FrontpanelController):
     LED_MAPPING_ID_TO_ENUM = {0: {0: FrontpanelController.Leds.INPUTS_1_4,
                                   1: FrontpanelController.Leds.RS485,

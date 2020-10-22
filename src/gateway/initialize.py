@@ -32,6 +32,8 @@ from six.moves.urllib.parse import urlparse, urlunparse
 
 import constants
 from bus.om_bus_client import MessageClient
+from gateway.hal.frontpanel_controller_classic import FrontpanelClassicController
+from gateway.hal.frontpanel_controller_core import FrontpanelCoreController
 from gateway.hal.master_controller_classic import MasterClassicController
 from gateway.hal.master_controller_core import MasterCoreController
 from gateway.models import Database, Feature
@@ -256,11 +258,11 @@ def setup_target_platform(target_platform, message_client_name):
         Injectable.value(master_controller=MasterClassicController())
 
     if target_platform == Platform.Type.CORE_PLUS:
-        from gateway.hal import frontpanel_controller_core
-        _ = frontpanel_controller_core
+        Injectable.value(frontpanel_controller=FrontpanelCoreController())
+    elif target_platform == Platform.Type.CLASSIC:
+        Injectable.value(frontpanel_controller=FrontpanelClassicController())
     else:
-        from gateway.hal import frontpanel_controller_classic
-        _ = frontpanel_controller_classic
+        Injectable.value(frontpanel_controller=None)
 
     # Thermostats
     thermostats_gateway_feature = Feature.get_or_none(name='thermostats_gateway')
