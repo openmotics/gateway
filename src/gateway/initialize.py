@@ -27,7 +27,7 @@ from threading import Lock
 
 from peewee_migrate import Router
 from serial import Serial
-from six.moves.configparser import ConfigParser
+from six.moves.configparser import ConfigParser, NoOptionError
 from six.moves.urllib.parse import urlparse, urlunparse
 
 import constants
@@ -151,6 +151,20 @@ def setup_target_platform(target_platform, message_client_name):
 
     config_database_file = constants.get_config_database_file()
 
+    # Webserver / Presentation layer
+    try:
+        https_port = int(config.get('OpenMotics', 'https_port'))
+    except NoOptionError:
+        https_port = 443
+    try:
+        http_port = int(config.get('OpenMotics', 'http_port'))
+    except NoOptionError:
+        http_port = 80
+    Injectable.value(https_port=https_port)
+    Injectable.value(http_port=http_port)
+    Injectable.value(ssl_private_key=constants.get_ssl_private_key_file())
+    Injectable.value(ssl_certificate=constants.get_ssl_certificate_file())
+
     # TODO: Clean up dependencies more to reduce complexity
 
     # IOC announcements
@@ -168,10 +182,6 @@ def setup_target_platform(target_platform, message_client_name):
          maintenance_controller, base, events, user_controller,
          pulse_counter_controller, metrics_caching, watchdog, output_controller, room_controller,
          sensor_controller, shutter_controller, group_action_controller, module_controller, ventilation_controller)
-
-    # Webserver / Presentation layer
-    Injectable.value(ssl_private_key=constants.get_ssl_private_key_file())
-    Injectable.value(ssl_certificate=constants.get_ssl_certificate_file())
 
     # IPC
     message_client = None

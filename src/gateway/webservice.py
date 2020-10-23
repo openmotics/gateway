@@ -2507,11 +2507,13 @@ class WebService(object):
     name = 'web'
 
     @Inject
-    def __init__(self, web_interface=INJECTED, verbose=False):
-        # type: (WebInterface, bool) -> None
+    def __init__(self, web_interface=INJECTED, http_port=INJECTED, https_port=INJECTED, verbose=False):
+        # type: (WebInterface, int, int, bool) -> None
         self._webinterface = web_interface
-        self._https_server = None  # type: Optional[cherrypy._cpserver.Server]
+        self._http_port = http_port
+        self._https_port = https_port
         self._http_server = None  # type: Optional[cherrypy._cpserver.Server]
+        self._https_server = None  # type: Optional[cherrypy._cpserver.Server]
         if not verbose:
             logging.getLogger("cherrypy").propagate = False
 
@@ -2534,6 +2536,8 @@ class WebService(object):
             OMPlugin(cherrypy.engine).subscribe()
             cherrypy.tools.websocket = OMSocketTool()
 
+            cherrypy.config.update({'server.socket_port': self._http_port})
+
             config = {'/terms': {'tools.staticdir.on': True,
                                  'tools.staticdir.dir': constants.get_terms_dir()},
                       '/static': {'tools.staticdir.on': True,
@@ -2554,7 +2558,7 @@ class WebService(object):
             cherrypy.server.unsubscribe()
 
             self._https_server = cherrypy._cpserver.Server()
-            self._https_server.socket_port = 443
+            self._https_server.socket_port = self._https_port
             self._https_server._socket_host = '0.0.0.0'
             self._https_server.socket_timeout = 60
             self._https_server.ssl_certificate = constants.get_ssl_certificate_file()
@@ -2563,7 +2567,7 @@ class WebService(object):
             self._https_server.subscribe()
 
             self._http_server = cherrypy._cpserver.Server()
-            self._http_server.socket_port = 80
+            self._http_server.socket_port = self._http_port
             if Config.get('enable_http', False):
                 # This is added for development purposes.
                 # Do NOT enable unless you know what you're doing and understand the risks.
