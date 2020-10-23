@@ -184,15 +184,14 @@ class System(object):
                                suppress_ragged_eofs=False)
 
     @staticmethod
-    def setup_cherrypy_ssl(https_server, private_key_filename, certificate_filename):
+    def setup_cherrypy_ssl(https_server):
         if System._use_pyopenssl():
             https_server.ssl_module = 'pyopenssl'
         else:
             import ssl
             https_server.ssl_module = 'builtin'
-            https_server.ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        https_server.ssl_certificate = certificate_filename
-        https_server.ssl_private_key = private_key_filename
+            if sys.version_info[:3] < (3, 6, 0):
+                https_server.ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 
     @staticmethod
     def handle_socket_exception(connection, exception, logger):
