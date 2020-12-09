@@ -366,7 +366,7 @@ class PluginController(object):
         # Remove the plugin configuration
         conf_file = '{0}/pi_{1}.conf'.format(self._plugin_config_path, name)
         if os.path.exists(conf_file):
-            os.remove(conf_file)
+            os.rename(conf_file, '{}.bak'.format(conf_file))
 
         # Finally remove database entry.
         Plugin.delete().where(Plugin.name == name).execute()
