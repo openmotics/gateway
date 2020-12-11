@@ -35,14 +35,20 @@ DEFAULT_INPUT_CONFIG = {'invert': 255}
 def add_virtual_modules(request, toolbox_session):
     toolbox = toolbox_session
 
-    data = toolbox.dut.get('/get_modules')
-    virtual_outputs = VIRTUAL_MODULES - sum(1 for x in data['outputs'] if x == 'o')
-    virtual_inputs = VIRTUAL_MODULES - sum(1 for x in data['inputs'] if x == 'i')
+    for _ in range(4):
+        data = toolbox.dut.get('/get_modules')
+        virtual_outputs = VIRTUAL_MODULES - sum(1 for x in data['outputs'] if x == 'o')
+        virtual_inputs = VIRTUAL_MODULES - sum(1 for x in data['inputs'] if x == 'i')
 
-    module_amounts = {'o': max(virtual_outputs, 0), 'i': max(virtual_inputs, 0)}
-    logger.info('adding extra virtual modules %s', module_amounts)
-    toolbox.add_virtual_modules(module_amounts=module_amounts)
-    time.sleep(10)
+        try:
+            module_amounts = {'o': max(virtual_outputs, 0), 'i': max(virtual_inputs, 0)}
+            logger.info('adding extra virtual modules %s', module_amounts)
+            toolbox.add_virtual_modules(module_amounts=module_amounts)
+        except Exception:
+            continue
+        finally:
+            time.sleep(10)
+        break
 
     statuses = toolbox.dut.get('/get_output_status')['status']
     max_id = max(x['id'] for x in statuses)
