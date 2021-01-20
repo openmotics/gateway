@@ -132,12 +132,6 @@ class ShutterGroup(BaseModel):
     room = ForeignKeyField(Room, null=True, on_delete='SET NULL', backref='shutter_groups')
 
 
-class Sensor(BaseModel):
-    id = AutoField()
-    number = IntegerField(unique=True)
-    room = ForeignKeyField(Room, null=True, on_delete='SET NULL', backref='sensors')
-
-
 class PulseCounter(BaseModel):
     id = AutoField()
     number = IntegerField(unique=True)
@@ -245,6 +239,29 @@ class Plugin(BaseModel):
     id = AutoField()
     name = CharField(unique=True)
     version = CharField()
+
+
+class Sensor(BaseModel):
+    class Types(object):
+        TEMPERATURE = 'temperature'
+        HUMIDITY = 'humidity'
+        BRIGHTNESS = 'brightness'
+        LUX = 'lux'
+        CO2 = 'co2'
+
+    id = AutoField()
+    type = CharField()  # Options: see Sensor.Types
+    source = CharField()  # Options: 'gateway', 'plugin' or 'master'
+    plugin = ForeignKeyField(Plugin, null=True, on_delete='CASCADE')
+    external_id = CharField()  # eg. serial number, reference, ...
+    name = CharField(null=True)
+    offset = FloatField()
+    room = ForeignKeyField(Room, null=True, on_delete='SET NULL', backref='sensors')
+
+    class Meta:
+        indexes = (
+            (('source', 'plugin_id', 'external_id'), True),
+        )
 
 
 class Ventilation(BaseModel):

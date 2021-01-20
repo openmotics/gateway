@@ -16,12 +16,16 @@
 Sensor BLL
 """
 from __future__ import absolute_import
+import time
 import logging
 from peewee import JOIN
 from ioc import Injectable, Inject, INJECTED, Singleton
-from gateway.base_controller import BaseController, SyncStructure
+from gateway.base_controller import BaseController
+from gateway.events import GatewayEvent
+from gateway.pubsub import PubSub
 from gateway.dto import SensorDTO
 from gateway.models import Sensor, Room
+from serial_utils import CommunicationTimedOutException
 
 if False:  # MYPY
     from typing import List, Tuple
@@ -33,11 +37,68 @@ logger = logging.getLogger("openmotics")
 @Singleton
 class SensorController(BaseController):
 
-    SYNC_STRUCTURES = [SyncStructure(Sensor, 'sensor')]
-
     @Inject
     def __init__(self, master_controller=INJECTED):
         super(SensorController, self).__init__(master_controller)
+        self._master_supported_sensor_types = [Sensor.Types.TEMPERATURE, Sensor.Types.HUMIDITY, Sensor.Types.BRIGHTNESS]
+
+    def _sync_orm(self):
+        # type: () -> bool
+
+        if self._sync_running:
+            logger.info('ORM sync (Sensor): Already running')
+            return False
+        self._sync_running = True
+
+        try:
+            try:
+                logger.info('ORM sync (Sensor)')
+                start = time.time()
+
+                ids = []
+                for dto in self._master_controller.load_sensors():
+                    id_ = dto.id
+                    ids.append(id_)
+
+                    # TODO: Issue here is that the code can't know whether a master-driven sensor has e.g. no humidity
+                    #       sensor connected, or it's just temporarily unavailable. For now, each master-driven sensor
+                    #       will have an ORM object foreach sensor type
+                    found_types = []
+                    for sensor in Sensor.select().where((Sensor.external_id == str(id_)) &
+                                                        (Sensor.source == 'master')):
+                        if sensor.type not in self._master_supported_sensor_types or sensor.type in found_types:
+                            sensor.delete_instance()
+                        else:
+                            sensor.name = dto.name
+                            sensor.offset = 0
+                            if sensor.type == Sensor.Types.TEMPERATURE:
+                                sensor.offset = dto.offset
+                            sensor.save()
+                        found_types.append(sensor.type)
+                    for sensor_type in self._master_supported_sensor_types:
+                        if sensor_type not in found_types:
+                            offset = 0
+                            if sensor_type == Sensor.Types.TEMPERATURE:
+                                offset = dto.offset
+                            Sensor.create(external_id=str(id_),
+                                          source='master',
+                                          type=sensor_type,
+                                          name=dto.name,
+                                          offset=offset)
+
+                duration = time.time() - start
+                logger.info('ORM sync (Sensor): completed after {0:.1f}s'.format(duration))
+            except CommunicationTimedOutException as ex:
+                logger.error('ORM sync (Sensor): Failed: {0}'.format(ex))
+            except Exception:
+                logger.exception('ORM sync (Sensor): Failed')
+
+            if self._sync_dirty:
+                gateway_event = GatewayEvent(GatewayEvent.Types.CONFIG_CHANGE, {'type': 'sensor'})
+                self._pubsub.publish_gateway_event(PubSub.GatewayTopics.CONFIG, gateway_event)
+        finally:
+            self._sync_running = False
+        return True
 
     def load_sensor(self, sensor_id):  # type: (int) -> SensorDTO
         sensor = Sensor.select(Room) \

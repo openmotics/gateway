@@ -143,15 +143,6 @@ class ShutterGroup(BaseModel):
     room: Optional[RoomForeignKeyField]
 
 
-class Sensor(BaseModel):
-    id: MixedPrimaryKeyField
-    number: MixedIntegerField
-    room: Optional[RoomForeignKeyField]
-
-
-class SensorForeignKeyField(Sensor, ForeignKeyField): ...
-
-
 class PulseCounter(BaseModel):
     id: MixedPrimaryKeyField
     number: MixedIntegerField
@@ -225,6 +216,27 @@ class Plugin(BaseModel):
 
 
 class PluginForeignKeyField(Plugin, ForeignKeyField): ...
+
+
+class Sensor(BaseModel):
+    class Types(object):
+        TEMPERATURE: Literal['temperature']
+        HUMIDITY: Literal['humidity']
+        BRIGHTNESS: Literal['brightness']
+        LUX: Literal['lux']
+        CO2: Literal['co2']
+
+    id: MixedPrimaryKeyField
+    type: MixedCharField
+    source: MixedCharField
+    plugin: PluginForeignKeyField
+    external_id: MixedCharField
+    name: MixedCharField
+    offset: MixedFloatField
+    room: RoomForeignKeyField
+
+
+class SensorForeignKeyField(Sensor, ForeignKeyField): ...
 
 
 class Ventilation(BaseModel):
